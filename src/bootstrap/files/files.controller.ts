@@ -48,6 +48,9 @@ export class FilesController {
     };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), AbilityGuard)
+  @CheckAbility({ action: 'trash', subject: 'File' })
   @Get('/trash')
   async trash(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

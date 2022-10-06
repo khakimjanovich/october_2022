@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { File } from './entities/file.entity';
 import { FilesService } from './files.service';
 import { FilesController } from './files.controller';
+import { AbilityModule } from '../ability/ability.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { FilesController } from './files.controller';
         };
       },
     }),
+    AbilityModule,
   ],
   controllers: [FilesController],
   providers: [ConfigModule, ConfigService, FilesService],

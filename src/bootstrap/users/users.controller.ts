@@ -20,8 +20,9 @@ import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserPermissionsDto } from './dto/update-user-permissions.dto';
 import { CheckAbility } from '../ability/ability.decorator';
+import { AbilityGuard } from '../ability/ability.guard';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), AbilityGuard)
 @ApiTags('Users')
 @Controller({
   path: 'users',
