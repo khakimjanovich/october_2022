@@ -1,34 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { LanguagesService } from './languages.service';
-import { CreateLanguageDto } from './dto/create-language.dto';
-import { UpdateLanguageDto } from './dto/update-language.dto';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('languages')
+@UseGuards(AuthGuard('jwt'))
+@Controller({
+  path: 'languages',
+  version: '1',
+})
 export class LanguagesController {
   constructor(private readonly languagesService: LanguagesService) {}
 
-  @Post()
-  create(@Body() createLanguageDto: CreateLanguageDto) {
-    return this.languagesService.create(createLanguageDto);
-  }
-
   @Get()
-  findAll() {
-    return this.languagesService.findAll();
+  async findAll() {
+    return { data: await this.languagesService.findAll() };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.languagesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLanguageDto: UpdateLanguageDto) {
-    return this.languagesService.update(+id, updateLanguageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.languagesService.remove(+id);
+  @Get(':locale')
+  async findOne(@Param('locale') locale: string) {
+    return { data: await this.languagesService.findOneByLocale(locale) };
   }
 }

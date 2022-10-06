@@ -23,7 +23,7 @@ export class AbilityGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    const ability = await this.abilityFactory.defineAbility(user.id);
+    const ability = await this.abilityFactory.defineAbility(user.email);
 
     return requiredRules.every((rule) =>
       ability.can(rule.action, rule.subject),

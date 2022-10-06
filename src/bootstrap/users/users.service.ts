@@ -19,6 +19,25 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository
       .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.created_by', 'created_by')
+      .leftJoinAndSelect('user.last_update_by', 'last_update_by')
+      .select([
+        'user.id',
+        'user.locale',
+        'user.name',
+        'user.email',
+        'user.created_at',
+        'user.updated_at',
+        'role.id',
+        'role.name',
+        'created_by.id',
+        'created_by.name',
+        'created_by.email',
+        'last_update_by.id',
+        'last_update_by.name',
+        'last_update_by.email',
+      ])
       .where('user.id = :id', { id })
       .getOne();
 
@@ -45,7 +64,7 @@ export class UsersService {
   }
 
   async paginate(page_size: number, page: number, search: string) {
-    const [data, count] = await this.usersRepository
+    return await this.usersRepository
       .createQueryBuilder('user')
       .where('user.email LIKE :search', { search: `%${search}%` })
       .orWhere('user.name LIKE :search', { search: `%${search}%` })
@@ -72,13 +91,6 @@ export class UsersService {
       .take(page_size)
       .skip((page - 1) * page_size)
       .getManyAndCount();
-
-    return {
-      page,
-      data,
-      count,
-      page_size,
-    };
   }
 
   async update(
@@ -107,7 +119,8 @@ export class UsersService {
     Object.assign(user, deleteUserDto);
     user.deleted_by = { id: current_user_id } as User;
     await this.usersRepository.save(user);
-    return this.usersRepository.softDelete(id);
+    await this.usersRepository.softDelete(id);
+    return user;
   }
 
   async findOneByEmail(email: string): Promise<User> {
@@ -126,7 +139,7 @@ export class UsersService {
   }
 
   async trash(page_size: number, page: number, search: string) {
-    const [data, count] = await this.usersRepository
+    return await this.usersRepository
       .createQueryBuilder('user')
       .withDeleted()
       .where('user.deleted_at IS NOT NULL')
@@ -158,13 +171,6 @@ export class UsersService {
       .take(page_size)
       .skip((page - 1) * page_size)
       .getManyAndCount();
-
-    return {
-      page,
-      data,
-      count,
-      page_size,
-    };
   }
 
   private async checkIfEmailUnique(email: string, id: number) {

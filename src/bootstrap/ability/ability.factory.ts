@@ -15,8 +15,8 @@ export class AbilityFactory {
     private readonly userService: UsersService,
   ) {}
 
-  async defineAbility(user_id: number) {
-    const user = await this.userService.findOne(user_id);
+  async defineAbility(email: string) {
+    const user = await this.userService.findOneByEmail(email);
 
     const { can, build } = new AbilityBuilder(
       Ability as AbilityClass<AppAbility>,

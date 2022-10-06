@@ -17,7 +17,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LanguagesModule } from './languages/languages.module';
 import { ActivitiesModule } from './activities/activities.module';
-import { FilesModule } from './media/files.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [

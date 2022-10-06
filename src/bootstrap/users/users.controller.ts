@@ -39,46 +39,70 @@ export class UsersController {
   }
 
   @Get()
-  index(
+  async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('page_size', new DefaultValuePipe(10), ParseIntPipe)
     page_size: number,
     @Query('search', new DefaultValuePipe('')) search: string,
   ) {
-    return this.usersService.paginate(page_size, page, search);
+    const [data, count] = await this.usersService.paginate(
+      page_size,
+      page,
+      search,
+    );
+    return {
+      page,
+      data,
+      count,
+      page_size,
+    };
   }
 
   @Get('trash')
-  trash(
+  async trash(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('page_size', new DefaultValuePipe(10), ParseIntPipe)
     page_size: number,
     @Query('search', new DefaultValuePipe('')) search: string,
   ) {
-    return this.usersService.trash(page_size, page, search);
+    const [data, count] = await this.usersService.trash(
+      page_size,
+      page,
+      search,
+    );
+
+    return {
+      page,
+      data,
+      count,
+      page_size,
+    };
   }
 
   @Get(':id')
-  show(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async show(@Param('id') id: string) {
+    return { data: await this.usersService.findOne(+id) };
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Request() request,
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    console.log('updating');
-    return this.usersService.update(+id, updateUserDto, request.user.id);
+    return {
+      data: await this.usersService.update(+id, updateUserDto, request.user.id),
+    };
   }
 
   @Post(':id')
-  delete(
+  async delete(
     @Request() request,
     @Param('id') id: string,
     @Body() deleteUserDto: DeleteUserDto,
   ) {
-    return this.usersService.remove(+id, deleteUserDto, request.user.id);
+    return {
+      data: await this.usersService.remove(+id, deleteUserDto, request.user.id),
+    };
   }
 }
