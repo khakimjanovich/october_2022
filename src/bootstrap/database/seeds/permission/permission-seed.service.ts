@@ -20,7 +20,14 @@ export class PermissionSeedService {
       'User',
     ];
 
-    const actions: string[] = ['index', 'create', 'read', 'update', 'delete'];
+    const actions: string[] = [
+      'index',
+      'create',
+      'read',
+      'update',
+      'delete',
+      'trash',
+    ];
 
     for (const subject of subjects) {
       for (const action of actions) {
