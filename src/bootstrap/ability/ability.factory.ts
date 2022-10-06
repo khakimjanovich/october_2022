@@ -2,9 +2,21 @@ import { Ability, AbilityBuilder, AbilityClass } from '@casl/ability';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 
-export type Actions = 'create' | 'read' | 'update' | 'delete' | 'index';
+export type Actions =
+  | 'create'
+  | 'read'
+  | 'update'
+  | 'delete'
+  | 'index'
+  | 'trash';
 
-export type Subjects = 'Activity' | 'Language' | 'Permission' | 'Role' | 'User';
+export type Subjects =
+  | 'Activity'
+  | 'Language'
+  | 'Permission'
+  | 'Role'
+  | 'User'
+  | 'File';
 
 export type AppAbility = Ability<[Actions, Subjects]>;
 

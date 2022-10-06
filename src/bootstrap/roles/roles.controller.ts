@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { RolesService } from './roles.service';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { AbilityGuard } from '../ability/ability.guard';
+import { CheckAbility } from '../ability/ability.decorator';
 
-@Controller('roles')
+@UseGuards(AuthGuard('jwt'), AbilityGuard)
+@Controller({
+  path: 'roles',
+  version: '1',
+})
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    return this.rolesService.create(createRoleDto);
-  }
-
+  @CheckAbility({ action: 'index', subject: 'Role' })
   @Get()
-  findAll() {
-    return this.rolesService.findAll();
+  async index(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('page_size', new DefaultValuePipe(10), ParseIntPipe)
+    page_size: number,
+    @Query('search', new DefaultValuePipe('')) search: string,
+  ) {
+    const [data, count] = await this.rolesService.paginate(page, page_size);
+
+    return {
+      page,
+      data,
+      count,
+      page_size,
+    };
   }
 
+  @CheckAbility({ action: 'read', subject: 'Role' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  show(@Param('id') id: string) {
     return this.rolesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
   }
 }

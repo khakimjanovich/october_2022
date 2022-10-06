@@ -3,7 +3,7 @@ import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from './entities/permission.entity';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class PermissionsService {
@@ -17,7 +17,7 @@ export class PermissionsService {
     const page_size: number = +query.page_size || 10;
     const search: string = query.search || '';
 
-    const [data, count] = await this.permissionsRepository.findAndCount({
+    return await this.permissionsRepository.findAndCount({
       order: {
         id: 'DESC',
       },
@@ -27,12 +27,13 @@ export class PermissionsService {
       skip: (page - 1) * page_size,
       take: page_size,
     });
+  }
 
-    return {
-      page,
-      data,
-      count,
-      page_size,
-    };
+  async findByIds(ids: number[]) {
+    return this.permissionsRepository.findBy({ id: In(ids) });
+  }
+
+  all() {
+    return this.permissionsRepository.find();
   }
 }

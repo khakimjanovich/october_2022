@@ -9,11 +9,14 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
+import { UpdateUserPermissionsDto } from './dto/update-user-permissions.dto';
+import { PermissionsService } from '../permissions/permissions.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   async findOne(id: number): Promise<User> {
@@ -22,6 +25,7 @@ export class UsersService {
       .leftJoinAndSelect('user.role', 'role')
       .leftJoinAndSelect('user.created_by', 'created_by')
       .leftJoinAndSelect('user.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('user.permissions', 'permissions')
       .select([
         'user.id',
         'user.locale',
@@ -37,6 +41,9 @@ export class UsersService {
         'last_update_by.id',
         'last_update_by.name',
         'last_update_by.email',
+        'permissions.id',
+        'permissions.subject',
+        'permissions.action',
       ])
       .where('user.id = :id', { id })
       .getOne();
@@ -171,6 +178,21 @@ export class UsersService {
       .take(page_size)
       .skip((page - 1) * page_size)
       .getManyAndCount();
+  }
+
+  async updatePermissions(
+    id: number,
+    updateUserPermissionsDto: UpdateUserPermissionsDto,
+    current_user_id: number,
+  ) {
+    const user = await this.findOne(id);
+
+    user.permissions = await this.permissionsService.findByIds(
+      updateUserPermissionsDto.permissions,
+    );
+
+    user.last_update_by = { id: current_user_id } as User;
+    return this.usersRepository.save(user);
   }
 
   private async checkIfEmailUnique(email: string, id: number) {

@@ -4,7 +4,7 @@ const userResponseSerializer = (user: User) => {
   delete user.password;
   delete user.previousPassword;
   delete user.role?.permissions;
-  delete user.permissions;
+  // delete user.permissions;
 };
 
 export default userResponseSerializer;

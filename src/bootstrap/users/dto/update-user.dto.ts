@@ -1,5 +1,6 @@
 import { IsOptional, MinLength, Validate } from 'class-validator';
 import { IsExist } from '../../utils/validators/is-exists.validator';
+import { Role } from '../../roles/entities/role.entity';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -11,6 +12,12 @@ export class UpdateUserDto {
   @IsOptional()
   @MinLength(6)
   password: string;
+
+  @IsOptional()
+  @Validate(IsExist, ['Role', 'id'], {
+    message: 'roleNotExists',
+  })
+  role?: Role;
 
   @Validate(IsExist, ['Language', 'locale'], {
     message: 'locale.doesNotExist',

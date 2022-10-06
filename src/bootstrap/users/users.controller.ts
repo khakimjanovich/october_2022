@@ -18,6 +18,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserPermissionsDto } from './dto/update-user-permissions.dto';
+import { CheckAbility } from '../ability/ability.decorator';
 
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Users')
@@ -38,6 +40,7 @@ export class UsersController {
     };
   }
 
+  @CheckAbility({ action: 'index', subject: 'User' })
   @Get()
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -58,6 +61,7 @@ export class UsersController {
     };
   }
 
+  @CheckAbility({ action: 'trash', subject: 'User' })
   @Get('trash')
   async trash(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -79,11 +83,13 @@ export class UsersController {
     };
   }
 
+  @CheckAbility({ action: 'read', subject: 'User' })
   @Get(':id')
   async show(@Param('id') id: string) {
     return { data: await this.usersService.findOne(+id) };
   }
 
+  @CheckAbility({ action: 'update', subject: 'User' })
   @Patch(':id')
   async update(
     @Request() request,
@@ -95,6 +101,23 @@ export class UsersController {
     };
   }
 
+  @CheckAbility({ action: 'update', subject: 'User' })
+  @Post(':id/permissions')
+  async updatePermissions(
+    @Request() request,
+    @Param('id') id: string,
+    @Body() updateUserPermissionsDto: UpdateUserPermissionsDto,
+  ) {
+    return {
+      data: await this.usersService.updatePermissions(
+        +id,
+        updateUserPermissionsDto,
+        request.user.id,
+      ),
+    };
+  }
+
+  @CheckAbility({ action: 'delete', subject: 'User' })
   @Post(':id')
   async delete(
     @Request() request,

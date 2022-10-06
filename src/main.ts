@@ -6,11 +6,9 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { SerializerInterceptor } from './bootstrap/utils/serializer.interceptor';
 import { validationOptions } from './bootstrap/utils/validation-options';
-import { AbilityExceptionFilter } from './bootstrap/ability/ability-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.useGlobalFilters(new AbilityExceptionFilter());
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   const configService = app.get(ConfigService);
