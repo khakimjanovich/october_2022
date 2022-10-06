@@ -11,6 +11,7 @@ import { MeController } from './controllers/me.controller';
 import { IsExist } from '../utils/validators/is-exists.validator';
 import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { UsersModule } from '../users/users.module';
+import { RefreshController } from './controllers/refresh.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,12 @@ import { UsersModule } from '../users/users.module';
       }),
     }),
   ],
-  controllers: [LoginController, RegisterController, MeController],
+  controllers: [
+    LoginController,
+    RegisterController,
+    MeController,
+    RefreshController,
+  ],
   providers: [IsExist, IsNotExist, AuthService, JwtStrategy, AnonymousStrategy],
   exports: [AuthService],
 })

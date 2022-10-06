@@ -55,11 +55,11 @@ export class AuthService {
   }
 
   update(user: User, userDto: AuthUpdateDto) {
-    return this.usersService.update(user.id, userDto);
+    return this.usersService.update(user.id, userDto, user.id);
   }
 
   async register(createUserDto: AuthRegisterLoginDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto, 0);
   }
 
   private async checkPassword(user: User, password: string): Promise<void> {
@@ -70,5 +70,18 @@ export class AuthService {
         message: 'users.invalidPassword',
       });
     }
+  }
+
+  async refresh(email: string) {
+    const user = await this.usersService.findOneByEmail(email);
+
+    const access_token = await this.createToken(user);
+    const expiration_date = await this.configService.get('auth.expires');
+    const token = { access_token, expiration_date };
+
+    return {
+      user,
+      token,
+    };
   }
 }

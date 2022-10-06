@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Main1664960350417 implements MigrationInterface {
-    name = 'Main1664960350417'
+export class Main1665050992172 implements MigrationInterface {
+    name = 'Main1665050992172'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "permissions" ("id" SERIAL NOT NULL, "action" character varying NOT NULL, "subject" character varying NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`);
@@ -11,6 +11,7 @@ export class Main1664960350417 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "activities" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "request_type" character varying, "route" character varying, "entity" character varying, "entity_id" integer, "before_update_action" text, "after_update_action" text, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "user_id" integer, CONSTRAINT "PK_7f4004429f731ffb9c88eb486a8" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "languages" ("id" SERIAL NOT NULL, "locale" character varying NOT NULL, "label" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_b517f827ca496b29f4d549c631d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_1c216b7894308fcecbee67c5d0" ON "languages" ("locale") `);
+        await queryRunner.query(`CREATE TABLE "files" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "path" character varying NOT NULL, "created_by_email" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_6c16b9093a142e0e7613b04a3d9" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "role_permission" ("rolesId" integer NOT NULL, "permissionsId" integer NOT NULL, CONSTRAINT "PK_35229662dc8257bd347c362ca7f" PRIMARY KEY ("rolesId", "permissionsId"))`);
         await queryRunner.query(`CREATE INDEX "IDX_4415da0ee208fbaab336fb4f82" ON "role_permission" ("rolesId") `);
         await queryRunner.query(`CREATE INDEX "IDX_6a66c28dfa49e57c784aae8325" ON "role_permission" ("permissionsId") `);
@@ -44,6 +45,7 @@ export class Main1664960350417 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_6a66c28dfa49e57c784aae8325"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_4415da0ee208fbaab336fb4f82"`);
         await queryRunner.query(`DROP TABLE "role_permission"`);
+        await queryRunner.query(`DROP TABLE "files"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_1c216b7894308fcecbee67c5d0"`);
         await queryRunner.query(`DROP TABLE "languages"`);
         await queryRunner.query(`DROP TABLE "activities"`);

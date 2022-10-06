@@ -63,6 +63,6 @@ export class RegisterController {
   async register(
     @Body() createUserDto: AuthRegisterLoginDto,
   ): Promise<{ data: User }> {
-    return await this.service.register(createUserDto);
+    return { data: await this.service.register(createUserDto) };
   }
 }

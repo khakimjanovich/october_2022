@@ -17,6 +17,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LanguagesModule } from './languages/languages.module';
 import { ActivitiesModule } from './activities/activities.module';
+import { FilesModule } from './media/files.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ActivitiesModule } from './activities/activities.module';
     UsersModule,
     AuthModule,
     AbilityModule,
+    FilesModule,
   ],
 })
 export class BootstrapModule {}
