@@ -60,9 +60,12 @@ export class RegisterController {
   })
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
-  async register(
-    @Body() createUserDto: AuthRegisterLoginDto,
-  ): Promise<{ data: User }> {
+  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<{
+    data: {
+      token: { access_token: string; expiration_date: string };
+      user: User;
+    };
+  }> {
     return { data: await this.service.register(createUserDto) };
   }
 }

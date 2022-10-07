@@ -6,6 +6,8 @@ import { User } from '../users/entities/user.entity';
 import { AuthUpdateDto } from './dto/auth-update.dto';
 import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { ConfigService } from '@nestjs/config';
+import { ActivitiesService } from '../activities/activities.service';
+import { CreateActivityDto } from '../activities/dto/create-activity.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private readonly configService: ConfigService,
+    private readonly activitiesService: ActivitiesService,
   ) {}
 
   async validateLogin(
@@ -31,6 +34,15 @@ export class AuthService {
     const expiration_date = await this.configService.get('auth.expires');
 
     const token = { access_token, expiration_date };
+
+    await this.activitiesService.create(
+      {
+        name: `${user.name} has logged in`,
+        route: '/api/v1/auth/login',
+        request_type: 'POST',
+      } as CreateActivityDto,
+      user.id,
+    );
 
     return { user, token };
   }
@@ -54,12 +66,35 @@ export class AuthService {
     return this.usersService.findOneByEmail(email);
   }
 
-  update(user: User, userDto: AuthUpdateDto) {
+  async update(email: string, userDto: AuthUpdateDto) {
+    const user = await this.usersService.findOneByEmail(email);
+
+    await this.activitiesService.create(
+      {
+        name: `${user.name} has updated profile`,
+        route: '/api/v1/auth/me',
+        request_type: 'PATCH',
+        before_update_action: user,
+        after_update_action: userDto,
+      } as CreateActivityDto,
+      user.id,
+    );
+
     return this.usersService.update(user.id, userDto, user.id);
   }
 
   async register(createUserDto: AuthRegisterLoginDto) {
-    return this.usersService.create(createUserDto, 0);
+    const user = await this.usersService.create(createUserDto, 0);
+
+    await this.activitiesService.create(
+      {
+        name: `${user.name} has registered`,
+        route: '/api/v1/auth/register',
+        request_type: 'POST',
+      } as CreateActivityDto,
+      user.id,
+    );
+    return this.validateLogin(createUserDto.email, createUserDto.password);
   }
 
   private async checkPassword(user: User, password: string): Promise<void> {

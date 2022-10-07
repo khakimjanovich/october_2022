@@ -65,8 +65,10 @@ export class UsersService {
     current_user_id: number,
   ): Promise<User> {
     const user = await this.usersRepository.create(createUserDto);
-    user.created_by = { id: current_user_id } as User;
-    user.last_update_by = { id: current_user_id } as User;
+    if (current_user_id) {
+      user.created_by = { id: current_user_id } as User;
+      user.last_update_by = { id: current_user_id } as User;
+    }
     return await this.usersRepository.save(user);
   }
 

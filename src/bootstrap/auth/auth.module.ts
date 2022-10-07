@@ -12,6 +12,7 @@ import { IsExist } from '../utils/validators/is-exists.validator';
 import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { UsersModule } from '../users/users.module';
 import { RefreshController } from './controllers/refresh.controller';
+import { ActivitiesModule } from '../activities/activities.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RefreshController } from './controllers/refresh.controller';
         },
       }),
     }),
+    ActivitiesModule,
   ],
   controllers: [
     LoginController,

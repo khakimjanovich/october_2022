@@ -28,6 +28,9 @@ export class User extends CrudLog {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  avatar?: string | null;
+
   @CreateDateColumn()
   created_at: Date;
 

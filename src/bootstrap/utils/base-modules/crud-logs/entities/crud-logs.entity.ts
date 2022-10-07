@@ -41,10 +41,10 @@ export class CrudLog extends EntityHelper {
   deleted_by?: User | null;
 
   @CreateDateColumn()
-  created_at?: Date | null;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at?: Date | null;
+  updated_at: Date;
 
   @DeleteDateColumn()
   deleted_at?: Date | null;

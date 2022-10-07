@@ -14,6 +14,9 @@ export class UpdateUserDto {
   password: string;
 
   @IsOptional()
+  avatar: string;
+
+  @IsOptional()
   @Validate(IsExist, ['Role', 'id'], {
     message: 'roleNotExists',
   })

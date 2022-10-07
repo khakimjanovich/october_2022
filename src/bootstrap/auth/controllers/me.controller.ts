@@ -72,6 +72,6 @@ export class MeController {
   @Patch('/')
   @HttpCode(HttpStatus.OK)
   public async update(@Request() request, @Body() userDto: AuthUpdateDto) {
-    return this.authService.update(request.user, userDto);
+    return this.authService.update(request.user.email, userDto);
   }
 }

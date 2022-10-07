@@ -21,7 +21,7 @@ export class Activity {
     example: 'Permissions was updated!',
     description: 'Specific comment for the action',
   })
-  @Column({})
+  @Column()
   name: string;
 
   @ApiProperty({
@@ -34,20 +34,6 @@ export class Activity {
   @ApiProperty({ example: '/permissions', description: 'The route was used' })
   @Column({ nullable: true })
   route: string;
-
-  @ApiProperty({
-    example: 'Permission',
-    description: 'Name of the entity that has been changed or created',
-  })
-  @Column({ nullable: true })
-  entity: string;
-
-  @ApiProperty({
-    example: '23',
-    description: 'Id of the entity that has been changed or created',
-  })
-  @Column({ nullable: true })
-  entity_id: number;
 
   @ApiProperty({
     example: "{'name':'permissions.index','label':'Browse permissions'}",

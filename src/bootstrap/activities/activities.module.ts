@@ -9,5 +9,6 @@ import { AbilityModule } from '../ability/ability.module';
   imports: [TypeOrmModule.forFeature([Activity]), AbilityModule],
   controllers: [ActivitiesController],
   providers: [ActivitiesService],
+  exports: [ActivitiesService],
 })
 export class ActivitiesModule {}
