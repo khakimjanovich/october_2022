@@ -7,12 +7,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { AbilityModule } from '../ability/ability.module';
+import { ActivitiesModule } from '../activities/activities.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => PermissionsModule),
     forwardRef(() => AbilityModule),
+    forwardRef(() => ActivitiesModule),
   ],
   controllers: [UsersController],
   providers: [UsersService, IsNotExist, IsExist],

@@ -9,8 +9,8 @@ import { InjectDataSource } from '@nestjs/typeorm';
 
 type ValidationEntity =
   | {
-  id?: number | string;
-}
+      id?: number | string;
+    }
   | undefined;
 
 @Injectable()
@@ -23,16 +23,15 @@ export class IsExist implements ValidatorConstraintInterface {
 
   async validate(value: string, validationArguments: ValidationArguments) {
     const repository = validationArguments.constraints[0] as string;
-    const currentValue = validationArguments.object as ValidationEntity;
+    const column =
+      validationArguments.constraints[1] !== undefined
+        ? validationArguments.constraints[1]
+        : 'id';
     const entity = (await this.dataSource.getRepository(repository).findOne({
       where: {
-        [validationArguments.property]: value,
+        [column]: value,
       },
     })) as ValidationEntity;
-
-    if (entity?.id === currentValue?.id) {
-      return false;
-    }
 
     return !!entity;
   }

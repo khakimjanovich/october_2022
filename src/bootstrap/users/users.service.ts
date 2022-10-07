@@ -11,12 +11,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { UpdateUserPermissionsDto } from './dto/update-user-permissions.dto';
 import { PermissionsService } from '../permissions/permissions.service';
+import { ActivitiesService } from '../activities/activities.service';
+import { ActivitiesRouteTypeEnum } from '../activities/activities-route-type.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     private readonly permissionsService: PermissionsService,
+    private readonly activitiesService: ActivitiesService,
   ) {}
 
   async findOne(id: number): Promise<User> {
@@ -126,9 +129,26 @@ export class UsersService {
   ) {
     const user = await this.findOne(id);
     Object.assign(user, deleteUserDto);
-    user.deleted_by = { id: current_user_id } as User;
+
+    const current_user = await this.findOne(current_user_id);
+    delete current_user?.role?.permissions;
+
+    user.deleted_by = current_user;
     await this.usersRepository.save(user);
+
+    await this.activitiesService.create(
+      {
+        name: `${current_user.name} has deleted the user`,
+        before_update_action: user,
+        route: '/api/v1/users/delete',
+        request_type: ActivitiesRouteTypeEnum.delete,
+        after_update_action: null,
+      },
+      current_user.id,
+    );
+
     await this.usersRepository.softDelete(id);
+
     return user;
   }
 

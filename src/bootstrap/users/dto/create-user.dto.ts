@@ -36,7 +36,7 @@ export class CreateUserDto extends PartialType(CreateCrudLogDto) {
   @Validate(IsExist, ['Role', 'id'], {
     message: 'roleNotExists',
   })
-  role?: Role;
+  role?: Role | null;
 
   @Validate(IsExist, ['Language', 'locale'], {
     message: 'locale.doesNotExist',
