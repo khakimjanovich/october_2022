@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ActivitiesRouteTypeEnum } from '../activities-route-type.enum';
 
 export class CreateActivityDto {
   @ApiProperty({
@@ -10,11 +11,11 @@ export class CreateActivityDto {
   name: string;
 
   @ApiProperty({
-    example: 'POST',
+    example: ActivitiesRouteTypeEnum.post,
     description: 'Type of the operation was held by the client/robot',
   })
   @IsNotEmpty()
-  request_type: string;
+  request_type: ActivitiesRouteTypeEnum;
 
   @ApiProperty({ example: '/permissions', description: 'The route was used' })
   @IsNotEmpty()

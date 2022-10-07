@@ -8,6 +8,7 @@ import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { ConfigService } from '@nestjs/config';
 import { ActivitiesService } from '../activities/activities.service';
 import { CreateActivityDto } from '../activities/dto/create-activity.dto';
+import { ActivitiesRouteTypeEnum } from '../activities/activities-route-type.enum';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
       {
         name: `${user.name} has logged in`,
         route: '/api/v1/auth/login',
-        request_type: 'POST',
+        request_type: ActivitiesRouteTypeEnum.post,
       } as CreateActivityDto,
       user.id,
     );
@@ -73,7 +74,7 @@ export class AuthService {
       {
         name: `${user.name} has updated profile`,
         route: '/api/v1/auth/me',
-        request_type: 'PATCH',
+        request_type: ActivitiesRouteTypeEnum.patch,
         before_update_action: user,
         after_update_action: userDto,
       } as CreateActivityDto,
@@ -90,7 +91,7 @@ export class AuthService {
       {
         name: `${user.name} has registered`,
         route: '/api/v1/auth/register',
-        request_type: 'POST',
+        request_type: ActivitiesRouteTypeEnum.post,
       } as CreateActivityDto,
       user.id,
     );
