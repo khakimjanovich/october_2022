@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../../users/entities/user.entity';
 import { RoleEnum } from '../../../roles/roles.enum';
 import { LanguagesEnum } from '../../../languages/languages.enum';
+import { BackendUser } from '../../../backend_users/entities/backend_user.entity';
 
 @Injectable()
-export class UserSeedService {
+export class BackendUserSeedService {
   constructor(
-    @InjectRepository(User)
-    private repository: Repository<User>,
+    @InjectRepository(BackendUser)
+    private repository: Repository<BackendUser>,
   ) {}
 
   async run() {

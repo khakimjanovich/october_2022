@@ -15,7 +15,7 @@ import { AbilityGuard } from '../ability/ability.guard';
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @ApiTags('Activities')
 @Controller({
-  path: 'activities',
+  path: 'admin/activities',
   version: '1',
 })
 export class ActivitiesController {

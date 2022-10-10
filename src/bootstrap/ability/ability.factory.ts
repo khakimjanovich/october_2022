@@ -1,6 +1,6 @@
 import { Ability, AbilityBuilder, AbilityClass } from '@casl/ability';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { BackendUsersService } from "../backend_users/backend_users.service";
 
 export type Actions =
   | 'create'
@@ -15,7 +15,7 @@ export type Subjects =
   | 'Language'
   | 'Permission'
   | 'Role'
-  | 'User'
+  | 'BackendUser'
   | 'File';
 
 export type AppAbility = Ability<[Actions, Subjects]>;
@@ -23,8 +23,8 @@ export type AppAbility = Ability<[Actions, Subjects]>;
 @Injectable()
 export class AbilityFactory {
   constructor(
-    @Inject(forwardRef(() => UsersService))
-    private readonly userService: UsersService,
+    @Inject(forwardRef(() => BackendUsersService))
+    private readonly userService: BackendUsersService,
   ) {}
 
   async defineAbility(email: string) {

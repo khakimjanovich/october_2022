@@ -1,23 +1,26 @@
-import { IsEmail, IsOptional, MinLength, Validate } from 'class-validator';
+import { IsOptional, MinLength, Validate } from 'class-validator';
 import { IsExist } from '../../utils/validators/is-exists.validator';
-import { Transform } from 'class-transformer';
+import { Role } from '../../roles/entities/role.entity';
 
-export class AuthUpdateDto {
-  @MinLength(1)
+export class UpdateBackendUserDto {
   @IsOptional()
   name: string;
 
-  @Transform(({ value }) => value?.toLowerCase().trim())
   @IsOptional()
-  @IsEmail()
   email: string;
+
+  @IsOptional()
+  @MinLength(6)
+  password: string;
 
   @IsOptional()
   avatar: string;
 
   @IsOptional()
-  @MinLength(6)
-  password: string;
+  @Validate(IsExist, ['Role', 'id'], {
+    message: 'roleNotExists',
+  })
+  role?: Role;
 
   @Validate(IsExist, ['Language', 'locale'], {
     message: 'locale.doesNotExist',

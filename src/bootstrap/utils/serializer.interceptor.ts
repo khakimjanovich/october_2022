@@ -7,8 +7,12 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import deepMapObject from './deep-map-object';
-import { User } from '../users/entities/user.entity';
-import userResponseSerializer from '../users/user-response.serializer';
+import { BackendUser } from '../backend_users/entities/backend_user.entity';
+import { User } from '../../modules/users/entities/user.entity';
+import {
+  backendUserResponseSerializer,
+  userResponseSerializer,
+} from '../backend_users/backend_user-response.serializer';
 
 @Injectable()
 export class SerializerInterceptor implements NestInterceptor {
@@ -16,7 +20,9 @@ export class SerializerInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         return deepMapObject(data, (value) => {
-          if (value.__entity === 'User') {
+          if (value.__entity === 'BackendUser') {
+            backendUserResponseSerializer(value as BackendUser);
+          } else if (value.__entity === 'User') {
             userResponseSerializer(value as User);
           }
 

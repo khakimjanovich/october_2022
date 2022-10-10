@@ -1,23 +1,23 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { BackendUsersService } from './backend_users.service';
+import { BackendUsersController } from './backend_users.controller';
 import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { IsExist } from '../utils/validators/is-exists.validator';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { BackendUser } from './entities/backend_user.entity';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { AbilityModule } from '../ability/ability.module';
 import { ActivitiesModule } from '../activities/activities.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([BackendUser]),
     forwardRef(() => PermissionsModule),
     forwardRef(() => AbilityModule),
     forwardRef(() => ActivitiesModule),
   ],
-  controllers: [UsersController],
-  providers: [UsersService, IsNotExist, IsExist],
-  exports: [UsersService],
+  controllers: [BackendUsersController],
+  providers: [BackendUsersService, IsNotExist, IsExist],
+  exports: [BackendUsersService],
 })
-export class UsersModule {}
+export class BackendUsersModule {}

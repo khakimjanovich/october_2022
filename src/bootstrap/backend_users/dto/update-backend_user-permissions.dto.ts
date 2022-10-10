@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
 
-export class UpdateUserPermissionsDto {
+export class UpdateBackendUserPermissionsDto {
   @IsNumber({}, { each: true })
   permissions: number[];
 }

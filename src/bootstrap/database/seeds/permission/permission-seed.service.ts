@@ -17,7 +17,7 @@ export class PermissionSeedService {
       'Language',
       'Permission',
       'Role',
-      'User',
+      'BackendUser',
     ];
 
     const actions: string[] = [

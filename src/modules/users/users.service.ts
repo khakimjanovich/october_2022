@@ -5,25 +5,28 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PermissionsService } from '../../bootstrap/permissions/permissions.service';
+import { ActivitiesService } from '../../bootstrap/activities/activities.service';
+import { ActivitiesRouteTypeEnum } from '../../bootstrap/activities/activities-route-type.enum';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { BackendUser } from '../../bootstrap/backend_users/entities/backend_user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
-import { UpdateUserPermissionsDto } from './dto/update-user-permissions.dto';
-import { PermissionsService } from '../permissions/permissions.service';
-import { ActivitiesService } from '../activities/activities.service';
-import { ActivitiesRouteTypeEnum } from '../activities/activities-route-type.enum';
+import { BackendUsersService } from '../../bootstrap/backend_users/backend_users.service';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private usersService: Repository<User>,
     private readonly permissionsService: PermissionsService,
     private readonly activitiesService: ActivitiesService,
+    private readonly backendUserService: BackendUsersService,
   ) {}
 
   async findOne(id: number): Promise<User> {
-    const user = await this.usersRepository
+    const user = await this.usersService
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.role', 'role')
       .leftJoinAndSelect('user.created_by', 'created_by')
@@ -67,16 +70,16 @@ export class UsersService {
     createUserDto: CreateUserDto,
     current_user_id: number,
   ): Promise<User> {
-    const user = await this.usersRepository.create(createUserDto);
+    const user = await this.usersService.create(createUserDto);
     if (current_user_id) {
-      user.created_by = { id: current_user_id } as User;
-      user.last_update_by = { id: current_user_id } as User;
+      user.created_by = { id: current_user_id } as BackendUser;
+      user.last_update_by = { id: current_user_id } as BackendUser;
     }
-    return await this.usersRepository.save(user);
+    return await this.usersService.save(user);
   }
 
   async paginate(page_size: number, page: number, search: string) {
-    return await this.usersRepository
+    return await this.usersService
       .createQueryBuilder('user')
       .where('user.email LIKE :search', { search: `%${search}%` })
       .orWhere('user.name LIKE :search', { search: `%${search}%` })
@@ -117,9 +120,9 @@ export class UsersService {
 
     Object.assign(user, updateUserDto);
 
-    user.last_update_by = { id: current_user_id } as User;
+    user.last_update_by = { id: current_user_id } as BackendUser;
 
-    return this.usersRepository.save(user);
+    return this.usersService.save(user);
   }
 
   async remove(
@@ -130,11 +133,10 @@ export class UsersService {
     const user = await this.findOne(id);
     Object.assign(user, deleteUserDto);
 
-    const current_user = await this.findOne(current_user_id);
-    delete current_user?.role?.permissions;
+    const current_user = await this.backendUserService.findOne(current_user_id);
 
     user.deleted_by = current_user;
-    await this.usersRepository.save(user);
+    await this.usersService.save(user);
 
     await this.activitiesService.create(
       {
@@ -147,13 +149,15 @@ export class UsersService {
       current_user.id,
     );
 
-    await this.usersRepository.softDelete(id);
+    await this.usersService.softDelete(id);
 
     return user;
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersService.findOne({
+      where: { email },
+    });
 
     if (!user) {
       throw new UnprocessableEntityException({
@@ -168,7 +172,7 @@ export class UsersService {
   }
 
   async trash(page_size: number, page: number, search: string) {
-    return await this.usersRepository
+    return await this.usersService
       .createQueryBuilder('user')
       .withDeleted()
       .where('user.deleted_at IS NOT NULL')
@@ -202,23 +206,8 @@ export class UsersService {
       .getManyAndCount();
   }
 
-  async updatePermissions(
-    id: number,
-    updateUserPermissionsDto: UpdateUserPermissionsDto,
-    current_user_id: number,
-  ) {
-    const user = await this.findOne(id);
-
-    user.permissions = await this.permissionsService.findByIds(
-      updateUserPermissionsDto.permissions,
-    );
-
-    user.last_update_by = { id: current_user_id } as User;
-    return this.usersRepository.save(user);
-  }
-
   private async checkIfEmailUnique(email: string, id: number) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.usersService.findOne({
       where: { email },
     });
 

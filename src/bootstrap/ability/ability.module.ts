@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AbilityFactory } from './ability.factory';
-import { UsersModule } from '../users/users.module';
+import { BackendUsersModule } from '../backend_users/backend_users.module';
 
 @Module({
   providers: [AbilityFactory],
   exports: [AbilityFactory],
-  imports: [forwardRef(() => UsersModule)],
+  imports: [forwardRef(() => BackendUsersModule)],
 })
 export class AbilityModule {}

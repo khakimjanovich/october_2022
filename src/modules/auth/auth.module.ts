@@ -8,15 +8,15 @@ import { AnonymousStrategy } from './strategies/anonymous.strategy';
 import { LoginController } from './controllers/login.controller';
 import { RegisterController } from './controllers/register.controller';
 import { MeController } from './controllers/me.controller';
-import { IsExist } from '../utils/validators/is-exists.validator';
-import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { RefreshController } from './controllers/refresh.controller';
-import { ActivitiesModule } from '../activities/activities.module';
-import { BackendUsersModule } from '../backend_users/backend_users.module';
+import { UsersModule } from '../users/users.module';
+import { ActivitiesModule } from '../../bootstrap/activities/activities.module';
+import { IsExist } from '../../bootstrap/utils/validators/is-exists.validator';
+import { IsNotExist } from '../../bootstrap/utils/validators/is-not-exists.validator';
 
 @Module({
   imports: [
-    BackendUsersModule,
+    UsersModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

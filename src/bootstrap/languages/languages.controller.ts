@@ -6,7 +6,7 @@ import { CheckAbility } from '../ability/ability.decorator';
 
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @Controller({
-  path: 'languages',
+  path: 'admin/languages',
   version: '1',
 })
 export class LanguagesController {

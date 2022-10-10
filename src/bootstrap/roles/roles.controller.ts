@@ -14,7 +14,7 @@ import { CheckAbility } from '../ability/ability.decorator';
 
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @Controller({
-  path: 'roles',
+  path: 'admin/roles',
   version: '1',
 })
 export class RolesController {

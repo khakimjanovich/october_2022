@@ -17,7 +17,7 @@ import { CheckAbility } from '../ability/ability.decorator';
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @Controller({
-  path: 'permissions',
+  path: 'admin/permissions',
   version: '1',
 })
 @Controller('permissions')

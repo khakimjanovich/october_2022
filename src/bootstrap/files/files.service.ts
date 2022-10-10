@@ -7,9 +7,9 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './entities/file.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
 import * as fs from 'fs';
 import { DeleteFileDto } from './dto/delete-file.dto';
+import { BackendUser } from '../backend_users/entities/backend_user.entity';
 
 @Injectable()
 export class FilesService {
@@ -38,7 +38,7 @@ export class FilesService {
       .getManyAndCount();
   }
 
-  async uploadFile(file, user: User): Promise<File> {
+  async uploadFile(file, user: BackendUser): Promise<File> {
     if (!file) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -49,7 +49,7 @@ export class FilesService {
     }
 
     const saved_file = await this.fileRepository.create({
-      path: `/${this.configService.get('app.apiPrefix')}/v1/${file.path}`,
+      path: `/${this.configService.get('app.apiPrefix')}/v1/admin/${file.path}`,
       locale: user.locale,
       created_by: user,
     });
@@ -77,8 +77,8 @@ export class FilesService {
   ) {
     const file = await this.findOne(id);
     file.deleted_reason = deleteFileDto.deleted_reason;
-    file.last_update_by = { id: current_user_id } as User;
-    file.deleted_by = { id: current_user_id } as User;
+    file.last_update_by = { id: current_user_id } as BackendUser;
+    file.deleted_by = { id: current_user_id } as BackendUser;
     await this.fileRepository.save(file);
     await this.removeFile(file.path);
     return this.fileRepository.softDelete(id);

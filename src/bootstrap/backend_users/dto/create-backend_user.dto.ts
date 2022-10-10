@@ -12,14 +12,14 @@ import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
 import { IsExist } from '../../utils/validators/is-exists.validator';
 import { Role } from '../../roles/entities/role.entity';
 
-export class CreateUserDto extends PartialType(CreateCrudLogDto) {
+export class CreateBackendUserDto extends PartialType(CreateCrudLogDto) {
   @MinLength(1)
   @IsNotEmpty()
   name: string;
 
   @Transform(({ value }) => value?.toLowerCase().trim())
   @IsNotEmpty()
-  @Validate(IsNotExist, ['User', 'email'], {
+  @Validate(IsNotExist, ['BackendUser', 'email'], {
     message: 'emailAlreadyExists',
   })
   @IsEmail()

@@ -3,12 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { TypeOrmConfigService } from '../typeorm-config.service';
-import { UserSeedModule } from './user/user-seed.module';
 import { LanguageSeedModule } from './language/language-seed.module';
 import { RoleSeedModule } from './role/role-seed.module';
 import { PermissionSeedModule } from './permission/permission-seed.module';
 import { databaseConfig } from '../../config/database.config';
 import { appConfig } from '../../config/app.config';
+import { BackendUserSeedModule } from './backend_user/backend_user-seed.module';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { appConfig } from '../../config/app.config';
     LanguageSeedModule,
     PermissionSeedModule,
     RoleSeedModule,
-    UserSeedModule,
+    BackendUserSeedModule,
   ],
 })
 export class SeedModule {}

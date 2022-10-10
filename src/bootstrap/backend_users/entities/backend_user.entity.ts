@@ -3,13 +3,11 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Role } from '../../roles/entities/role.entity';
@@ -17,8 +15,8 @@ import { CrudLog } from '../../utils/base-modules/crud-logs/entities/crud-logs.e
 import { Permission } from '../../permissions/entities/permission.entity';
 import { RoleEnum } from '../../roles/roles.enum';
 
-@Entity('users')
-export class User extends CrudLog {
+@Entity('backend_users')
+export class BackendUser extends CrudLog {
   @Column()
   name: string;
 
@@ -30,12 +28,6 @@ export class User extends CrudLog {
 
   @Column({ nullable: true })
   avatar?: string | null;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 
   public previousPassword: string;
 
@@ -53,7 +45,9 @@ export class User extends CrudLog {
     eager: true,
   })
   @JoinTable({
-    name: 'user_permission',
+    name: 'backend_user_permission',
+    joinColumn: { name: 'backend_user_id' },
+    inverseJoinColumn: { name: 'permission_id' },
   })
   permissions: Permission[];
 

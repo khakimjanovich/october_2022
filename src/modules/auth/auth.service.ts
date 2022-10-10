@@ -4,17 +4,17 @@ import * as bcrypt from 'bcryptjs';
 import { AuthUpdateDto } from './dto/auth-update.dto';
 import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { ConfigService } from '@nestjs/config';
-import { ActivitiesService } from '../activities/activities.service';
-import { CreateActivityDto } from '../activities/dto/create-activity.dto';
-import { ActivitiesRouteTypeEnum } from '../activities/activities-route-type.enum';
-import { BackendUsersService } from '../backend_users/backend_users.service';
-import { BackendUser } from '../backend_users/entities/backend_user.entity';
+import { ActivitiesService } from '../../bootstrap/activities/activities.service';
+import { ActivitiesRouteTypeEnum } from '../../bootstrap/activities/activities-route-type.enum';
+import { CreateActivityDto } from '../../bootstrap/activities/dto/create-activity.dto';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private usersService: BackendUsersService,
+    private usersService: UsersService,
     private readonly configService: ConfigService,
     private readonly activitiesService: ActivitiesService,
   ) {}
@@ -23,7 +23,7 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<{
-    user: BackendUser;
+    user: User;
     token: { access_token: string; expiration_date: string };
   }> {
     const user = await this.usersService.findOneByEmail(email);
@@ -48,7 +48,7 @@ export class AuthService {
     return { user, token };
   }
 
-  async createToken(user: BackendUser) {
+  async createToken(user: User) {
     return this.jwtService.sign({
       id: user.id,
       email: user.email,
@@ -63,7 +63,7 @@ export class AuthService {
     return await bcrypt.compare(password, hashed_password);
   }
 
-  async me(email: string): Promise<BackendUser> {
+  async me(email: string): Promise<User> {
     return this.usersService.findOneByEmail(email);
   }
 
@@ -98,10 +98,7 @@ export class AuthService {
     return this.validateLogin(createUserDto.email, createUserDto.password);
   }
 
-  private async checkPassword(
-    user: BackendUser,
-    password: string,
-  ): Promise<void> {
+  private async checkPassword(user: User, password: string): Promise<void> {
     const is_valid = await this.comparePassword(user.password, password);
 
     if (!is_valid) {

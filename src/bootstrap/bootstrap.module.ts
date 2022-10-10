@@ -3,21 +3,18 @@ import { databaseConfig } from './config/database.config';
 import { authConfig } from './config/auth.config';
 import { appConfig } from './config/app.config';
 import { fileConfig } from './config/file.config';
-import * as path from 'path';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
-import { HeaderResolver } from 'nestjs-i18n';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
 import { AbilityModule } from './ability/ability.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LanguagesModule } from './languages/languages.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { FilesModule } from './files/files.module';
+import { BackendUsersModule } from './backend_users/backend_users.module';
 
 @Module({
   imports: [
@@ -36,7 +33,7 @@ import { FilesModule } from './files/files.module';
     LanguagesModule,
     PermissionsModule,
     RolesModule,
-    UsersModule,
+    BackendUsersModule,
     AuthModule,
     AbilityModule,
     FilesModule,

@@ -20,6 +20,8 @@ export class Role extends EntityHelper {
   })
   @JoinTable({
     name: 'role_permission',
+    joinColumn: { name: 'role_id' },
+    inverseJoinColumn: { name: 'permission_id' },
   })
   permissions: Permission[];
 }

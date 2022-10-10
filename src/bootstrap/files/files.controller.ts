@@ -25,7 +25,7 @@ import { CheckAbility } from '../ability/ability.decorator';
 
 @ApiTags('Files')
 @Controller({
-  path: 'files',
+  path: 'admin/files',
   version: '1',
 })
 export class FilesController {

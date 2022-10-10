@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityHelper } from '../../../entity-helper';
-import { User } from '../../../../users/entities/user.entity';
+import { BackendUser } from '../../../../backend_users/entities/backend_user.entity';
 
 export class CrudLog extends EntityHelper {
   @PrimaryGeneratedColumn()
@@ -22,23 +22,23 @@ export class CrudLog extends EntityHelper {
   @Column({ nullable: true })
   deleted_reason?: string | null;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => BackendUser)
   @JoinColumn({
     name: 'created_by_id',
   })
-  created_by?: User | null;
+  created_by?: BackendUser | null;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => BackendUser)
   @JoinColumn({
     name: 'last_updated_by_id',
   })
-  last_update_by?: User | null;
+  last_update_by?: BackendUser | null;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => BackendUser)
   @JoinColumn({
     name: 'deleted_by_id',
   })
-  deleted_by?: User | null;
+  deleted_by?: BackendUser | null;
 
   @CreateDateColumn()
   created_at: Date;

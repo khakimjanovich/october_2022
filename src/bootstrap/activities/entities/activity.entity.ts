@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../users/entities/user.entity';
+import { BackendUser } from '../../backend_users/entities/backend_user.entity';
 
 @Entity('activities')
 export class Activity {
@@ -50,11 +50,11 @@ export class Activity {
   after_update_action: object;
 
   @ApiProperty({ example: '1', description: 'The user relation entity' })
-  @ManyToOne(() => User)
+  @ManyToOne(() => BackendUser)
   @JoinColumn({
     name: 'user_id',
   })
-  user: User;
+  user: BackendUser;
 
   @ApiProperty({
     example: '2022-01-02',

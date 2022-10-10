@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Activity } from './entities/activity.entity';
 import { Repository } from 'typeorm';
 import { CreateActivityDto } from './dto/create-activity.dto';
-import { User } from '../users/entities/user.entity';
+import { BackendUser } from '../backend_users/entities/backend_user.entity';
 
 @Injectable()
 export class ActivitiesService {
@@ -43,7 +43,7 @@ export class ActivitiesService {
 
   async create(createActivityDto: CreateActivityDto, current_user_id: number) {
     const activity = await this.activityRepository.create(createActivityDto);
-    activity.user = { id: current_user_id } as User;
+    activity.user = { id: current_user_id } as BackendUser;
 
     return this.activityRepository.save(activity);
   }
