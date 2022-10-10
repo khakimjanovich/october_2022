@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PermissionsService } from '../../bootstrap/permissions/permissions.service';
 import { ActivitiesService } from '../../bootstrap/activities/activities.service';
 import { ActivitiesRouteTypeEnum } from '../../bootstrap/activities/activities-route-type.enum';
 import { User } from './entities/user.entity';
@@ -20,7 +19,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersService: Repository<User>,
-    private readonly permissionsService: PermissionsService,
     private readonly activitiesService: ActivitiesService,
     private readonly backendUserService: BackendUsersService,
   ) {}
@@ -31,7 +29,6 @@ export class UsersService {
       .leftJoinAndSelect('user.role', 'role')
       .leftJoinAndSelect('user.created_by', 'created_by')
       .leftJoinAndSelect('user.last_update_by', 'last_update_by')
-      .leftJoinAndSelect('user.permissions', 'permissions')
       .select([
         'user.id',
         'user.locale',
@@ -47,9 +44,6 @@ export class UsersService {
         'last_update_by.id',
         'last_update_by.name',
         'last_update_by.email',
-        'permissions.id',
-        'permissions.subject',
-        'permissions.action',
       ])
       .where('user.id = :id', { id })
       .getOne();

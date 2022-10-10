@@ -3,9 +3,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { BackendUser } from '../../backend_users/entities/backend_user.entity';
+import { User } from '../../users/entities/user.entity';
 
-type JwtPayload = Pick<BackendUser, 'id' | 'role'> & {
+type JwtPayload = Pick<User, 'id'> & {
   iat: number;
   exp: number;
 };

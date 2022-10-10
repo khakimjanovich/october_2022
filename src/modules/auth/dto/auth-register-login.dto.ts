@@ -6,8 +6,8 @@ import {
   Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { IsExist } from '../../utils/validators/is-exists.validator';
-import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
+import { IsNotExist } from '../../../bootstrap/utils/validators/is-not-exists.validator';
+import { IsExist } from '../../../bootstrap/utils/validators/is-exists.validator';
 
 export class AuthRegisterLoginDto {
   @MinLength(1)
@@ -16,7 +16,7 @@ export class AuthRegisterLoginDto {
 
   @Transform(({ value }) => value?.toLowerCase().trim())
   @IsNotEmpty()
-  @Validate(IsNotExist, ['BackendUser', 'email'], {
+  @Validate(IsNotExist, ['User', 'email'], {
     message: 'emailAlreadyExists',
   })
   @IsEmail()

@@ -1,7 +1,3 @@
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { DeleteDto } from '../../utils/base-modules/crud-logs/dto/delete.dto';
 
-export class DeleteFileDto {
-  @IsNotEmpty()
-  @MinLength(4)
-  deleted_reason: string;
-}
+export class DeleteFileDto extends DeleteDto {}

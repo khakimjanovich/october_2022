@@ -2,11 +2,11 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthEmailLoginDto } from '../dto/auth-email-login.dto';
-import { BackendUser } from '../../backend_users/entities/backend_user.entity';
+import { User } from '../../users/entities/user.entity';
 
 @ApiTags('Auth')
 @Controller({
-  path: 'admin/auth',
+  path: 'auth',
   version: '1',
 })
 export class LoginController {
@@ -63,7 +63,7 @@ export class LoginController {
   public async login(@Body() loginDto: AuthEmailLoginDto): Promise<{
     data: {
       token: { access_token: string; expiration_date: string };
-      user: BackendUser;
+      user: User;
     };
   }> {
     return {

@@ -1,6 +1,6 @@
 import { Ability, AbilityBuilder, AbilityClass } from '@casl/ability';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { BackendUsersService } from "../backend_users/backend_users.service";
+import { BackendUsersService } from '../backend_users/backend_users.service';
 
 export type Actions =
   | 'create'
@@ -16,7 +16,8 @@ export type Subjects =
   | 'Permission'
   | 'Role'
   | 'BackendUser'
-  | 'File';
+  | 'File'
+  | 'User';
 
 export type AppAbility = Ability<[Actions, Subjects]>;
 

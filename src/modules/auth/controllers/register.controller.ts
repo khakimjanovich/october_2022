@@ -2,11 +2,12 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { AuthRegisterLoginDto } from '../dto/auth-register-login.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BackendUser } from '../../backend_users/entities/backend_user.entity';
+import { User } from '../../users/entities/user.entity';
 
 ApiTags('Auth');
+
 @Controller({
-  path: 'admin/auth',
+  path: 'auth',
   version: '1',
 })
 export class RegisterController {
@@ -63,7 +64,7 @@ export class RegisterController {
   async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<{
     data: {
       token: { access_token: string; expiration_date: string };
-      user: BackendUser;
+      user: User;
     };
   }> {
     return { data: await this.service.register(createUserDto) };
