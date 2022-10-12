@@ -1,10 +1,13 @@
 {
   "name": "october_2022",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "nestjs boilerplate",
+  "author": {
+    "name": "Yunusali Khakimjanovich",
+    "email": "yunusalikhakimjanovich@gmail.com"
+  },
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "typeorm": "env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:generate": "npm run typeorm -- -d=src/bootstrap/database/data-source.ts migration:generate",
