@@ -24,7 +24,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe(validationOptions));
 
   const options = new DocumentBuilder()
-    .setTitle('Beeline admin panel')
+    .setTitle('Admin panel')
     .setDescription('API docs of the admin panel')
     .setVersion('1.0')
     .addBearerAuth()
