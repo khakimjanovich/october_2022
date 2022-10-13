@@ -14,7 +14,7 @@ export class LoginController {
 
   @ApiOperation({ summary: 'Login endpoint' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     schema: {
       example: {
         data: {
