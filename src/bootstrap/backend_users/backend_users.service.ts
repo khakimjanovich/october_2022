@@ -167,6 +167,11 @@ export class BackendUsersService {
       });
     }
 
+    delete user.deleted_reason;
+    delete user.deleted_at;
+    delete user.role?.permissions;
+    delete user.previousPassword;
+
     return user;
   }
 

@@ -6,7 +6,7 @@ import { BackendUser } from '../../backend_users/entities/backend_user.entity';
 
 @ApiTags('Auth')
 @Controller({
-  path: 'admin/auth',
+  path: 'auth',
   version: '1',
 })
 export class LoginController {
@@ -18,29 +18,63 @@ export class LoginController {
     schema: {
       example: {
         data: {
-          token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6eyJpZCI6MSwibmFtZSI6IkFkbWluIiwiX19lbnRpdHkiOiJSb2xlIn0sImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY2MjcxNDk3NiwiZXhwIjoxNjYyODAxMzc2fQ.xyAq4_L5Kt3dARAjlrW8aEr-4JtaBg98O7xT4I7T2YU',
           user: {
             id: 1,
-            first_name: 'Admin updated',
-            last_name: 'Admin',
+            locale: 'uz',
+            created_at: '2022-10-13T11:24:26.965Z',
+            updated_at: '2022-10-13T11:44:42.083Z',
+            name: 'Super admin updated',
             email: 'admin@example.com',
             avatar:
               'http://localhost:3000/api/v1/files/43fc562a-c3ab-477b-8586-d65305116693.png',
-            locale: 'en',
-            created_at: '2022-09-07T09:29:18.134Z',
-            updated_at: '2022-09-08T05:41:56.749Z',
             role: {
               id: 1,
               name: 'Admin',
-              __entity: 'Role',
             },
-            status: {
-              id: 1,
-              name: 'Active',
-              __entity: 'UserStatus',
-            },
-            __entity: 'User',
+            permissions: [],
+            all_permissions: [
+              'File.index',
+              'File.create',
+              'File.read',
+              'File.update',
+              'File.delete',
+              'File.trash',
+              'Activity.index',
+              'Activity.create',
+              'Activity.read',
+              'Activity.update',
+              'Activity.delete',
+              'Activity.trash',
+              'Language.index',
+              'Language.create',
+              'Language.read',
+              'Language.update',
+              'Language.delete',
+              'Language.trash',
+              'Permission.index',
+              'Permission.create',
+              'Permission.read',
+              'Permission.update',
+              'Permission.delete',
+              'Permission.trash',
+              'Role.index',
+              'Role.create',
+              'Role.read',
+              'Role.update',
+              'Role.delete',
+              'Role.trash',
+              'BackendUser.index',
+              'BackendUser.create',
+              'BackendUser.read',
+              'BackendUser.update',
+              'BackendUser.delete',
+              'BackendUser.trash',
+            ],
+          },
+          token: {
+            access_token:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImxvY2FsZSI6InV6IiwiaWF0IjoxNjY1NjYxOTA5LCJleHAiOjE2NjU2NzI3MDl9.6q7KVEHFON24oNwMsxzdVpUJ-46j-kokunZwSpUzEjc',
+            expiration_date: '3h',
           },
         },
       },
@@ -51,9 +85,9 @@ export class LoginController {
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     schema: {
       example: {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          password: 'incorrectPassword',
+          password: 'users.invalidPassword',
         },
       },
     },

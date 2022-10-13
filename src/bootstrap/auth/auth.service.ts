@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { AuthUpdateDto } from './dto/auth-update.dto';
@@ -86,8 +90,19 @@ export class AuthService {
       } as CreateActivityDto,
       user.id,
     );
+    const backend_user = await this.usersService.update(
+      user.id,
+      userDto,
+      user.id,
+    );
 
-    return this.usersService.update(user.id, userDto, user.id);
+    delete backend_user.password;
+    delete backend_user.deleted_reason;
+    delete backend_user.deleted_at;
+    delete backend_user.role?.permissions;
+    delete backend_user.previousPassword;
+
+    return backend_user;
   }
 
   async register(createUserDto: AuthRegisterLoginDto) {
@@ -101,6 +116,7 @@ export class AuthService {
       } as CreateActivityDto,
       user.id,
     );
+
     return this.validateLogin(createUserDto.email, createUserDto.password);
   }
 
@@ -112,7 +128,10 @@ export class AuthService {
 
     if (!is_valid) {
       throw new UnprocessableEntityException({
-        message: 'users.invalidPassword',
+        statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          message: 'users.invalidPassword',
+        },
       });
     }
   }

@@ -4,9 +4,9 @@ import { AuthRegisterLoginDto } from '../dto/auth-register-login.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BackendUser } from '../../backend_users/entities/backend_user.entity';
 
-ApiTags('Auth');
+@ApiTags('Auth')
 @Controller({
-  path: 'admin/auth',
+  path: 'auth',
   version: '1',
 })
 export class RegisterController {
@@ -19,28 +19,25 @@ export class RegisterController {
     schema: {
       example: {
         data: {
-          token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6eyJpZCI6MiwibmFtZSI6IlVzZXIiLCJfX2VudGl0eSI6IlJvbGUifSwiZW1haWwiOiJ0ZXN0MUBleGFtcGxlLmNvbSIsImxvY2FsZSI6InV6IiwiaWF0IjoxNjYyNzE1NzU1LCJleHAiOjE2NjI4MDIxNTV9.QkgKatQGtLbFgLsuYQLaCqXaaMXhj8LT0S8oIQeFu0U',
           user: {
-            id: 3,
-            first_name: 'John',
-            last_name: 'Doe',
-            email: 'test1@example.com',
+            id: 6,
+            locale: 'ru',
+            created_at: '2022-10-13T12:13:03.329Z',
+            updated_at: '2022-10-13T12:13:03.329Z',
+            name: 'admin',
+            email: 'adm2a131i2n3@admin.com',
             avatar: null,
-            locale: 'uz',
-            created_at: '2022-09-09T09:29:15.046Z',
-            updated_at: '2022-09-09T09:29:15.046Z',
             role: {
               id: 2,
               name: 'User',
-              __entity: 'Role',
             },
-            status: {
-              id: 1,
-              name: 'Active',
-              __entity: 'UserStatus',
-            },
-            __entity: 'User',
+            permissions: [],
+            all_permissions: [],
+          },
+          token: {
+            access_token:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG0yYTEzMWkybjNAYWRtaW4uY29tIiwibG9jYWxlIjoicnUiLCJpYXQiOjE2NjU2NjMxODMsImV4cCI6MTY2NTY3Mzk4M30.-o2mX8IntdW9HpxmzJRkFLcFYzWxZBsbCLTFJ8SwX5k',
+            expiration_date: '3h',
           },
         },
       },

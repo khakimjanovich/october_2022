@@ -17,7 +17,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('Auth')
 @UseGuards(AuthGuard('jwt'))
 @Controller({
-  path: 'admin/auth/me',
+  path: 'auth/me',
   version: '1',
 })
 export class MeController {
@@ -30,25 +30,57 @@ export class MeController {
     schema: {
       example: {
         data: {
-          id: 3,
-          first_name: 'John',
-          last_name: 'Doe',
-          email: 'test1@example.com',
-          avatar: null,
+          id: 1,
           locale: 'uz',
-          created_at: '2022-09-09T09:29:15.046Z',
-          updated_at: '2022-09-09T09:29:15.046Z',
+          created_at: '2022-10-13T11:24:26.965Z',
+          updated_at: '2022-10-13T11:44:42.083Z',
+          name: 'Super admin updated',
+          email: 'admin@example.com',
+          avatar:
+            'http://localhost:3000/api/v1/files/43fc562a-c3ab-477b-8586-d65305116693.png',
           role: {
-            id: 2,
-            name: 'User',
-            __entity: 'Role',
-          },
-          status: {
             id: 1,
-            name: 'Active',
-            __entity: 'UserStatus',
+            name: 'Admin',
           },
-          __entity: 'User',
+          permissions: [],
+          all_permissions: [
+            'File.index',
+            'File.create',
+            'File.read',
+            'File.update',
+            'File.delete',
+            'File.trash',
+            'Activity.index',
+            'Activity.create',
+            'Activity.read',
+            'Activity.update',
+            'Activity.delete',
+            'Activity.trash',
+            'Language.index',
+            'Language.create',
+            'Language.read',
+            'Language.update',
+            'Language.delete',
+            'Language.trash',
+            'Permission.index',
+            'Permission.create',
+            'Permission.read',
+            'Permission.update',
+            'Permission.delete',
+            'Permission.trash',
+            'Role.index',
+            'Role.create',
+            'Role.read',
+            'Role.update',
+            'Role.delete',
+            'Role.trash',
+            'BackendUser.index',
+            'BackendUser.create',
+            'BackendUser.read',
+            'BackendUser.update',
+            'BackendUser.delete',
+            'BackendUser.trash',
+          ],
         },
       },
     },
@@ -58,7 +90,7 @@ export class MeController {
     description: 'Unauthorized response',
     schema: {
       example: {
-        statusCode: 401,
+        statusCode: HttpStatus.UNAUTHORIZED,
         message: 'Unauthorized',
       },
     },
@@ -78,9 +110,34 @@ export class MeController {
   }
 
   @ApiOperation({ summary: 'Update current user endpoint' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successful response',
+    schema: {
+      example: {
+        id: 6,
+        locale: 'uz',
+        created_at: '2022-10-13T12:13:03.329Z',
+        updated_at: '2022-10-13T12:17:12.635Z',
+        name: 'Super admin updated',
+        email: 'adm2a131i2n3@admin.com',
+        role: {
+          id: 2,
+          name: 'User',
+        },
+        created_by: null,
+        last_update_by: {
+          id: 6,
+        },
+        permissions: [],
+        avatar:
+          'http://localhost:3000/api/v1/files/43fc562a-c3ab-477b-8586-d65305116693.png',
+      },
+    },
+  })
   @Patch('/')
   @HttpCode(HttpStatus.OK)
   public async update(@Request() request, @Body() userDto: AuthUpdateDto) {
-    return this.authService.update(request.user.email, userDto);
+    return { data: await this.authService.update(request.user.email, userDto) };
   }
 }
