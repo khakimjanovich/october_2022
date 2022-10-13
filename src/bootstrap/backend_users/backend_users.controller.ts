@@ -15,7 +15,12 @@ import {
 import { BackendUsersService } from './backend_users.service';
 import { CreateBackendUserDto } from './dto/create-backend_user.dto';
 import { UpdateBackendUserDto } from './dto/update-backend_user.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { DeleteBackendUserDto } from './dto/delete-backend_user.dto';
 import { BackendUser } from './entities/backend_user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -25,6 +30,7 @@ import { AbilityGuard } from '../ability/ability.guard';
 
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @ApiTags('Backend Users')
+@ApiBearerAuth()
 @Controller({
   path: 'backend-users',
   version: '1',

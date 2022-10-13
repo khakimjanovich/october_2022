@@ -1,5 +1,10 @@
 import { AuthService } from '../auth.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Controller,
   HttpStatus,
@@ -11,6 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Auth')
+@ApiBearerAuth()
 @Controller({
   path: 'auth',
   version: '1',

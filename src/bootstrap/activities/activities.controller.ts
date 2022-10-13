@@ -8,13 +8,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CheckAbility } from '../ability/ability.decorator';
 import { AbilityGuard } from '../ability/ability.guard';
 
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @ApiTags('Activities')
+@ApiBearerAuth()
 @Controller({
   path: 'activities',
   version: '1',

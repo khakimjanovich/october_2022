@@ -12,9 +12,15 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
 import { AuthUpdateDto } from '../dto/auth-update.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Auth')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'auth/me',

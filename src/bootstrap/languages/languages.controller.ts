@@ -3,9 +3,15 @@ import { LanguagesService } from './languages.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AbilityGuard } from '../ability/ability.guard';
 import { CheckAbility } from '../ability/ability.decorator';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Languages')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @Controller({
   path: 'admin/languages',
