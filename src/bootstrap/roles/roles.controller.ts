@@ -1,10 +1,12 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
   HttpStatus,
   Param,
   ParseIntPipe,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -18,12 +20,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CreateRoleDto } from './dto/create-role.dto';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'), AbilityGuard)
 @Controller({
-  path: 'admin/roles',
+  path: 'roles',
   version: '1',
 })
 export class RolesController {
@@ -83,190 +86,192 @@ export class RolesController {
     status: HttpStatus.OK,
     schema: {
       example: {
-        id: 1,
-        name: 'Admin',
-        permissions: [
-          {
-            id: 1,
-            action: 'index',
-            subject: 'File',
-          },
-          {
-            id: 2,
-            action: 'create',
-            subject: 'File',
-          },
-          {
-            id: 3,
-            action: 'read',
-            subject: 'File',
-          },
-          {
-            id: 4,
-            action: 'update',
-            subject: 'File',
-          },
-          {
-            id: 5,
-            action: 'delete',
-            subject: 'File',
-          },
-          {
-            id: 6,
-            action: 'trash',
-            subject: 'File',
-          },
-          {
-            id: 7,
-            action: 'index',
-            subject: 'Activity',
-          },
-          {
-            id: 8,
-            action: 'create',
-            subject: 'Activity',
-          },
-          {
-            id: 9,
-            action: 'read',
-            subject: 'Activity',
-          },
-          {
-            id: 10,
-            action: 'update',
-            subject: 'Activity',
-          },
-          {
-            id: 11,
-            action: 'delete',
-            subject: 'Activity',
-          },
-          {
-            id: 12,
-            action: 'trash',
-            subject: 'Activity',
-          },
-          {
-            id: 13,
-            action: 'index',
-            subject: 'Language',
-          },
-          {
-            id: 14,
-            action: 'create',
-            subject: 'Language',
-          },
-          {
-            id: 15,
-            action: 'read',
-            subject: 'Language',
-          },
-          {
-            id: 16,
-            action: 'update',
-            subject: 'Language',
-          },
-          {
-            id: 17,
-            action: 'delete',
-            subject: 'Language',
-          },
-          {
-            id: 18,
-            action: 'trash',
-            subject: 'Language',
-          },
-          {
-            id: 19,
-            action: 'index',
-            subject: 'Permission',
-          },
-          {
-            id: 20,
-            action: 'create',
-            subject: 'Permission',
-          },
-          {
-            id: 21,
-            action: 'read',
-            subject: 'Permission',
-          },
-          {
-            id: 22,
-            action: 'update',
-            subject: 'Permission',
-          },
-          {
-            id: 23,
-            action: 'delete',
-            subject: 'Permission',
-          },
-          {
-            id: 24,
-            action: 'trash',
-            subject: 'Permission',
-          },
-          {
-            id: 25,
-            action: 'index',
-            subject: 'Role',
-          },
-          {
-            id: 26,
-            action: 'create',
-            subject: 'Role',
-          },
-          {
-            id: 27,
-            action: 'read',
-            subject: 'Role',
-          },
-          {
-            id: 28,
-            action: 'update',
-            subject: 'Role',
-          },
-          {
-            id: 29,
-            action: 'delete',
-            subject: 'Role',
-          },
-          {
-            id: 30,
-            action: 'trash',
-            subject: 'Role',
-          },
-          {
-            id: 31,
-            action: 'index',
-            subject: 'BackendUser',
-          },
-          {
-            id: 32,
-            action: 'create',
-            subject: 'BackendUser',
-          },
-          {
-            id: 33,
-            action: 'read',
-            subject: 'BackendUser',
-          },
-          {
-            id: 34,
-            action: 'update',
-            subject: 'BackendUser',
-          },
-          {
-            id: 35,
-            action: 'delete',
-            subject: 'BackendUser',
-          },
-          {
-            id: 36,
-            action: 'trash',
-            subject: 'BackendUser',
-          },
-        ],
+        data: {
+          id: 1,
+          name: 'Admin',
+          permissions: [
+            {
+              id: 1,
+              action: 'index',
+              subject: 'File',
+            },
+            {
+              id: 2,
+              action: 'create',
+              subject: 'File',
+            },
+            {
+              id: 3,
+              action: 'read',
+              subject: 'File',
+            },
+            {
+              id: 4,
+              action: 'update',
+              subject: 'File',
+            },
+            {
+              id: 5,
+              action: 'delete',
+              subject: 'File',
+            },
+            {
+              id: 6,
+              action: 'trash',
+              subject: 'File',
+            },
+            {
+              id: 7,
+              action: 'index',
+              subject: 'Activity',
+            },
+            {
+              id: 8,
+              action: 'create',
+              subject: 'Activity',
+            },
+            {
+              id: 9,
+              action: 'read',
+              subject: 'Activity',
+            },
+            {
+              id: 10,
+              action: 'update',
+              subject: 'Activity',
+            },
+            {
+              id: 11,
+              action: 'delete',
+              subject: 'Activity',
+            },
+            {
+              id: 12,
+              action: 'trash',
+              subject: 'Activity',
+            },
+            {
+              id: 13,
+              action: 'index',
+              subject: 'Language',
+            },
+            {
+              id: 14,
+              action: 'create',
+              subject: 'Language',
+            },
+            {
+              id: 15,
+              action: 'read',
+              subject: 'Language',
+            },
+            {
+              id: 16,
+              action: 'update',
+              subject: 'Language',
+            },
+            {
+              id: 17,
+              action: 'delete',
+              subject: 'Language',
+            },
+            {
+              id: 18,
+              action: 'trash',
+              subject: 'Language',
+            },
+            {
+              id: 19,
+              action: 'index',
+              subject: 'Permission',
+            },
+            {
+              id: 20,
+              action: 'create',
+              subject: 'Permission',
+            },
+            {
+              id: 21,
+              action: 'read',
+              subject: 'Permission',
+            },
+            {
+              id: 22,
+              action: 'update',
+              subject: 'Permission',
+            },
+            {
+              id: 23,
+              action: 'delete',
+              subject: 'Permission',
+            },
+            {
+              id: 24,
+              action: 'trash',
+              subject: 'Permission',
+            },
+            {
+              id: 25,
+              action: 'index',
+              subject: 'Role',
+            },
+            {
+              id: 26,
+              action: 'create',
+              subject: 'Role',
+            },
+            {
+              id: 27,
+              action: 'read',
+              subject: 'Role',
+            },
+            {
+              id: 28,
+              action: 'update',
+              subject: 'Role',
+            },
+            {
+              id: 29,
+              action: 'delete',
+              subject: 'Role',
+            },
+            {
+              id: 30,
+              action: 'trash',
+              subject: 'Role',
+            },
+            {
+              id: 31,
+              action: 'index',
+              subject: 'BackendUser',
+            },
+            {
+              id: 32,
+              action: 'create',
+              subject: 'BackendUser',
+            },
+            {
+              id: 33,
+              action: 'read',
+              subject: 'BackendUser',
+            },
+            {
+              id: 34,
+              action: 'update',
+              subject: 'BackendUser',
+            },
+            {
+              id: 35,
+              action: 'delete',
+              subject: 'BackendUser',
+            },
+            {
+              id: 36,
+              action: 'trash',
+              subject: 'BackendUser',
+            },
+          ],
+        },
       },
     },
     description: 'Successful response!',
@@ -284,7 +289,12 @@ export class RolesController {
   })
   @CheckAbility({ action: 'read', subject: 'Role' })
   @Get(':id')
-  show(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+  async show(@Param('id') id: string) {
+    return { data: await this.rolesService.findOne(+id) };
+  }
+
+  @Post('/')
+  async create(@Body() createRoleDto: CreateRoleDto) {
+    return { data: await this.rolesService.create(createRoleDto) };
   }
 }

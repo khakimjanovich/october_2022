@@ -5,6 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
@@ -13,7 +14,7 @@ import { Permission } from '../../permissions/entities/permission.entity';
 @Entity({ name: 'roles' })
 export class Role extends BaseEntity {
   @ApiProperty({ example: 1 })
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Allow()

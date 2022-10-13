@@ -13,6 +13,7 @@ import { UpdateBackendUserPermissionsDto } from './dto/update-backend_user-permi
 import { PermissionsService } from '../permissions/permissions.service';
 import { ActivitiesService } from '../activities/activities.service';
 import { ActivitiesRouteTypeEnum } from '../activities/activities-route-type.enum';
+import { CreateActivityDto } from '../activities/dto/create-activity.dto';
 
 @Injectable()
 export class BackendUsersService {
@@ -73,6 +74,20 @@ export class BackendUsersService {
       user.created_by = { id: current_user_id } as BackendUser;
       user.last_update_by = { id: current_user_id } as BackendUser;
     }
+
+    if (current_user_id) {
+      const current_user = await this.findOne(current_user_id);
+      await this.activitiesService.create(
+        {
+          name: `${current_user.name} created user ${user.name}`,
+          request_type: ActivitiesRouteTypeEnum.post,
+          route: '/api/v1/backend_users',
+          after_update_action: user,
+        } as CreateActivityDto,
+        current_user_id,
+      );
+    }
+
     return await this.backendUsersRepository.save(user);
   }
 
@@ -116,6 +131,20 @@ export class BackendUsersService {
     if (updateUserDto.email)
       await this.checkIfEmailUnique(updateUserDto.email, user.id);
 
+    if (current_user_id) {
+      const current_user = await this.findOne(current_user_id);
+      await this.activitiesService.create(
+        {
+          name: `${current_user.name} updated user ${user.name}`,
+          request_type: ActivitiesRouteTypeEnum.patch,
+          route: '/api/v1/backend_users' + user.id,
+          before_update_action: user,
+          after_update_action: updateUserDto,
+        } as CreateActivityDto,
+        current_user_id,
+      );
+    }
+
     Object.assign(user, updateUserDto);
 
     user.last_update_by = { id: current_user_id } as BackendUser;
@@ -130,6 +159,18 @@ export class BackendUsersService {
   ) {
     const user = await this.findOne(id);
     Object.assign(user, deleteUserDto);
+
+    if (current_user_id) {
+      const current_user = await this.findOne(current_user_id);
+      await this.activitiesService.create(
+        {
+          name: `${current_user.name} deleted user ${user.name}`,
+          request_type: ActivitiesRouteTypeEnum.delete,
+          route: '/api/v1/backend_users/' + user.id,
+        } as CreateActivityDto,
+        current_user_id,
+      );
+    }
 
     const current_user = await this.findOne(current_user_id);
     delete current_user?.role?.permissions;
@@ -220,6 +261,18 @@ export class BackendUsersService {
     user.permissions = await this.permissionsService.findByIds(
       updateUserPermissionsDto.permissions,
     );
+
+    if (current_user_id) {
+      const current_user = await this.findOne(current_user_id);
+      await this.activitiesService.create(
+        {
+          name: `${current_user.name} updated user ${user.name} permissions`,
+          request_type: ActivitiesRouteTypeEnum.post,
+          route: '/api/v1/backend_users' + user.id + '/permissions',
+        } as CreateActivityDto,
+        current_user_id,
+      );
+    }
 
     user.last_update_by = { id: current_user_id } as BackendUser;
     return this.backendUsersRepository.save(user);

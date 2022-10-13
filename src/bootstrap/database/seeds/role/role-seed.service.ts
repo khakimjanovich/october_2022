@@ -40,9 +40,15 @@ export class RoleSeedService {
         id: RoleEnum.admin,
         name: 'Admin',
       });
-      admin.permissions = await this.permissionService.findAll();
-
       await this.repository.save(admin);
     }
+
+    const superAdminRole = await this.repository.findOne({
+      where: { id: RoleEnum.admin },
+    });
+
+    superAdminRole.permissions = await this.permissionService.findAll();
+
+    await this.repository.save(superAdminRole);
   }
 }

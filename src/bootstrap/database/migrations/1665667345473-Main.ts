@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Main1665660177720 implements MigrationInterface {
-    name = 'Main1665660177720'
+export class Main1665667345473 implements MigrationInterface {
+    name = 'Main1665667345473'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "permissions" ("id" SERIAL NOT NULL, "action" character varying NOT NULL, "subject" character varying NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "roles" ("id" integer NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "roles" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "backend_users" ("id" SERIAL NOT NULL, "locale" character varying NOT NULL, "deleted_reason" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "name" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "avatar" character varying, "created_by_id" integer, "last_updated_by_id" integer, "deleted_by_id" integer, "role_id" integer, CONSTRAINT "PK_1f37124d7a7c5890f01afa4947b" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_f57217e50362fcaf1ef7e7c629" ON "backend_users" ("locale") `);
         await queryRunner.query(`CREATE TABLE "activities" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "request_type" character varying, "route" character varying, "before_update_action" text, "after_update_action" text, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "user_id" integer, CONSTRAINT "PK_7f4004429f731ffb9c88eb486a8" PRIMARY KEY ("id"))`);
