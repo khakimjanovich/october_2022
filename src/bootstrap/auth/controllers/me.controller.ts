@@ -66,8 +66,17 @@ export class MeController {
   @Get('/')
   @HttpCode(HttpStatus.OK)
   async me(@Request() request) {
-    return { data: await this.authService.me(request.user.email) };
+    const user = await this.authService.me(request.user.email);
+
+    delete user.password;
+    delete user.role?.permissions;
+    delete user.previousPassword;
+    delete user.deleted_at;
+    delete user.deleted_reason;
+
+    return { data: user };
   }
+
   @ApiOperation({ summary: 'Update current user endpoint' })
   @Patch('/')
   @HttpCode(HttpStatus.OK)

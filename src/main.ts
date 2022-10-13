@@ -4,7 +4,6 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
-import { SerializerInterceptor } from './bootstrap/utils/serializer.interceptor';
 import { validationOptions } from './bootstrap/utils/validation-options';
 
 async function bootstrap() {
@@ -20,7 +19,6 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  app.useGlobalInterceptors(new SerializerInterceptor());
   app.useGlobalPipes(new ValidationPipe(validationOptions));
 
   const options = new DocumentBuilder()

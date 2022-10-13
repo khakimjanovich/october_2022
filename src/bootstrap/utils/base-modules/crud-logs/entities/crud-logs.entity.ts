@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -8,10 +9,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EntityHelper } from '../../../entity-helper';
 import { BackendUser } from '../../../../backend_users/entities/backend_user.entity';
 
-export class CrudLog extends EntityHelper {
+export class CrudLog extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

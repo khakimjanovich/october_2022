@@ -38,12 +38,18 @@ export class AuthService {
 
     await this.activitiesService.create(
       {
-        name: `${user.name} has logged in`,
+        name: `${user.name} logged in`,
         route: '/api/v1/admin/auth/login',
         request_type: ActivitiesRouteTypeEnum.post,
       } as CreateActivityDto,
       user.id,
     );
+
+    delete user.password;
+    delete user.deleted_reason;
+    delete user.deleted_at;
+    delete user.role?.permissions;
+    delete user.previousPassword;
 
     return { user, token };
   }
@@ -72,7 +78,7 @@ export class AuthService {
 
     await this.activitiesService.create(
       {
-        name: `${user.name} has updated profile`,
+        name: `${user.name} updated profile`,
         route: '/api/v1/admin/auth/me',
         request_type: ActivitiesRouteTypeEnum.patch,
         before_update_action: user,
@@ -89,7 +95,7 @@ export class AuthService {
 
     await this.activitiesService.create(
       {
-        name: `${user.name} has registered`,
+        name: `${user.name} registered`,
         route: '/api/v1/admin/auth/register',
         request_type: ActivitiesRouteTypeEnum.post,
       } as CreateActivityDto,
@@ -117,6 +123,20 @@ export class AuthService {
     const access_token = await this.createToken(user);
     const expiration_date = await this.configService.get('auth.expires');
     const token = { access_token, expiration_date };
+
+    await this.activitiesService.create(
+      {
+        name: `${user.name} refreshed auth token!`,
+        route: '/api/v1/admin/auth/refresh',
+        request_type: ActivitiesRouteTypeEnum.post,
+      } as CreateActivityDto,
+      user.id,
+    );
+    delete user.password;
+    delete user.deleted_reason;
+    delete user.deleted_at;
+    delete user.role?.permissions;
+    delete user.previousPassword;
 
     return {
       user,

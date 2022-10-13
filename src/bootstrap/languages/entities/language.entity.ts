@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -7,10 +8,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { EntityHelper } from '../../utils/entity-helper';
 
 @Entity({ name: 'languages' })
-export class Language extends EntityHelper {
+export class Language extends BaseEntity {
   @ApiProperty({ example: '1', description: 'The unique ID of the language' })
   @PrimaryGeneratedColumn()
   id: number;

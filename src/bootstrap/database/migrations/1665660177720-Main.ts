@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Main1665141051587 implements MigrationInterface {
-    name = 'Main1665141051587'
+export class Main1665660177720 implements MigrationInterface {
+    name = 'Main1665660177720'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "permissions" ("id" SERIAL NOT NULL, "action" character varying NOT NULL, "subject" character varying NOT NULL, CONSTRAINT "PK_920331560282b8bd21bb02290df" PRIMARY KEY ("id"))`);
@@ -13,8 +13,6 @@ export class Main1665141051587 implements MigrationInterface {
         await queryRunner.query(`CREATE INDEX "IDX_1c216b7894308fcecbee67c5d0" ON "languages" ("locale") `);
         await queryRunner.query(`CREATE TABLE "files" ("id" SERIAL NOT NULL, "locale" character varying NOT NULL, "deleted_reason" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "path" character varying NOT NULL, "created_by_id" integer, "last_updated_by_id" integer, "deleted_by_id" integer, CONSTRAINT "PK_6c16b9093a142e0e7613b04a3d9" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_d1a6a0fcc9e7219301c520eaa8" ON "files" ("locale") `);
-        await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "locale" character varying NOT NULL, "deleted_reason" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "name" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "created_by_id" integer, "last_updated_by_id" integer, "deleted_by_id" integer, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE INDEX "IDX_48e51c1d92ff2b53b0542f8f8f" ON "users" ("locale") `);
         await queryRunner.query(`CREATE TABLE "role_permission" ("role_id" integer NOT NULL, "permission_id" integer NOT NULL, CONSTRAINT "PK_19a94c31d4960ded0dcd0397759" PRIMARY KEY ("role_id", "permission_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_3d0a7155eafd75ddba5a701336" ON "role_permission" ("role_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_e3a3ba47b7ca00fd23be4ebd6c" ON "role_permission" ("permission_id") `);
@@ -29,9 +27,6 @@ export class Main1665141051587 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "files" ADD CONSTRAINT "FK_56bb34e9a86bf782fef80d8a868" FOREIGN KEY ("created_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "files" ADD CONSTRAINT "FK_62fc7167eb939bb0bd04898a208" FOREIGN KEY ("last_updated_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "files" ADD CONSTRAINT "FK_44b230dec73af3d1c595e1177d9" FOREIGN KEY ("deleted_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "FK_1bbd34899b8e74ef2a7f3212806" FOREIGN KEY ("created_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "FK_c9b69267c4a02c39008fcf94d70" FOREIGN KEY ("last_updated_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "FK_4241f21b9bb35e82a6217af1aad" FOREIGN KEY ("deleted_by_id") REFERENCES "backend_users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "role_permission" ADD CONSTRAINT "FK_3d0a7155eafd75ddba5a7013368" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "role_permission" ADD CONSTRAINT "FK_e3a3ba47b7ca00fd23be4ebd6cf" FOREIGN KEY ("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "backend_user_permission" ADD CONSTRAINT "FK_968052569d0fc7c1a0245ade30b" FOREIGN KEY ("backend_user_id") REFERENCES "backend_users"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -43,9 +38,6 @@ export class Main1665141051587 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "backend_user_permission" DROP CONSTRAINT "FK_968052569d0fc7c1a0245ade30b"`);
         await queryRunner.query(`ALTER TABLE "role_permission" DROP CONSTRAINT "FK_e3a3ba47b7ca00fd23be4ebd6cf"`);
         await queryRunner.query(`ALTER TABLE "role_permission" DROP CONSTRAINT "FK_3d0a7155eafd75ddba5a7013368"`);
-        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "FK_4241f21b9bb35e82a6217af1aad"`);
-        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "FK_c9b69267c4a02c39008fcf94d70"`);
-        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "FK_1bbd34899b8e74ef2a7f3212806"`);
         await queryRunner.query(`ALTER TABLE "files" DROP CONSTRAINT "FK_44b230dec73af3d1c595e1177d9"`);
         await queryRunner.query(`ALTER TABLE "files" DROP CONSTRAINT "FK_62fc7167eb939bb0bd04898a208"`);
         await queryRunner.query(`ALTER TABLE "files" DROP CONSTRAINT "FK_56bb34e9a86bf782fef80d8a868"`);
@@ -60,8 +52,6 @@ export class Main1665141051587 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_e3a3ba47b7ca00fd23be4ebd6c"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_3d0a7155eafd75ddba5a701336"`);
         await queryRunner.query(`DROP TABLE "role_permission"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_48e51c1d92ff2b53b0542f8f8f"`);
-        await queryRunner.query(`DROP TABLE "users"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_d1a6a0fcc9e7219301c520eaa8"`);
         await queryRunner.query(`DROP TABLE "files"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_1c216b7894308fcecbee67c5d0"`);
