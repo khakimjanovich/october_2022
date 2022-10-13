@@ -175,7 +175,7 @@ export class BackendUsersService {
     const current_user = await this.findOne(current_user_id);
     delete current_user?.role?.permissions;
 
-    user.deleted_by = current_user;
+    user.deleted_by = { id: current_user.id } as BackendUser;
     await this.backendUsersRepository.save(user);
 
     await this.activitiesService.create(
