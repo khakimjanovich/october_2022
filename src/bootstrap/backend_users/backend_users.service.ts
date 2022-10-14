@@ -99,6 +99,7 @@ export class BackendUsersService {
       .leftJoinAndSelect('backend_user.role', 'role')
       .leftJoinAndSelect('backend_user.created_by', 'created_by')
       .leftJoinAndSelect('backend_user.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('backend_user.permissions', 'permissions')
       .select([
         'backend_user.id',
         'backend_user.locale',
@@ -114,6 +115,9 @@ export class BackendUsersService {
         'last_update_by.email',
         'role.name',
         'role.id',
+        'permissions.id',
+        'permissions.subject',
+        'permissions.action',
       ])
       .orderBy('backend_user.id', 'DESC')
       .take(page_size)
@@ -137,7 +141,7 @@ export class BackendUsersService {
         {
           name: `${current_user.name} updated user ${user.name}`,
           request_type: ActivitiesRouteTypeEnum.patch,
-          route: '/api/v1/backend_users' + user.id,
+          route: '/api/v1/backend_users/' + user.id,
           before_update_action: user,
           after_update_action: updateUserDto,
         } as CreateActivityDto,
@@ -268,7 +272,7 @@ export class BackendUsersService {
         {
           name: `${current_user.name} updated user ${user.name} permissions`,
           request_type: ActivitiesRouteTypeEnum.post,
-          route: '/api/v1/backend_users' + user.id + '/permissions',
+          route: '/api/v1/backend_users/' + user.id + '/permissions',
         } as CreateActivityDto,
         current_user_id,
       );
