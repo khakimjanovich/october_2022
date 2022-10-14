@@ -275,6 +275,13 @@ export class BackendUsersService {
     }
 
     user.last_update_by = { id: current_user_id } as BackendUser;
+
+    delete user.previousPassword;
+    delete user.password;
+    delete user.deleted_reason;
+    delete user.deleted_at;
+    delete user.role?.permissions;
+
     return this.backendUsersRepository.save(user);
   }
 

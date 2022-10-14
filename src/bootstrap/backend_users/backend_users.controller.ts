@@ -437,23 +437,50 @@ export class BackendUsersController {
     schema: {
       example: {
         data: {
-          id: 1,
-          locale: 'uz',
-          created_at: '2022-10-13T11:24:26.965Z',
-          updated_at: '2022-10-13T11:44:42.083Z',
-          name: 'Super admin updated',
-          email: 'admin@example.com',
+          id: 3,
+          locale: 'en',
+          created_at: '2022-10-13T13:28:28.239Z',
+          updated_at: '2022-10-13T16:09:37.456Z',
+          name: 'John Doe',
+          email: 'john.doe@example.com',
           role: {
-            id: 1,
-            name: 'Admin',
+            id: 2,
+            name: 'User',
           },
           created_by: null,
           last_update_by: {
             id: 1,
-            name: 'Super admin updated',
-            email: 'admin@example.com',
           },
-          permissions: [],
+          permissions: [
+            {
+              id: 1,
+              action: 'index',
+              subject: 'File',
+            },
+            {
+              id: 2,
+              action: 'create',
+              subject: 'File',
+            },
+            {
+              id: 3,
+              action: 'read',
+              subject: 'File',
+            },
+            {
+              id: 4,
+              action: 'update',
+              subject: 'File',
+            },
+            {
+              id: 5,
+              action: 'delete',
+              subject: 'File',
+            },
+          ],
+          deleted_reason: null,
+          deleted_at: null,
+          avatar: null,
         },
       },
     },
