@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { Repository } from 'typeorm';
 import { PermissionsService } from '../permissions/permissions.service';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
@@ -30,6 +31,21 @@ export class RolesService {
 
   async create(createRoleDto: CreateRoleDto) {
     const role = await this.roleRepository.create({ name: createRoleDto.name });
+    return await this.roleRepository.save(role);
+  }
+
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
+    const role = await this.roleRepository.findOne({ where: { id } });
+    if (!role) {
+      throw NotFoundException;
+    }
+
+    Object.assign(role, { name: updateRoleDto.name });
+
+    role.permissions = await this.permissionsService.findByIds(
+      updateRoleDto.permissions,
+    );
+
     return await this.roleRepository.save(role);
   }
 }

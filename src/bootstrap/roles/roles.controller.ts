@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
@@ -293,8 +295,95 @@ export class RolesController {
     return { data: await this.rolesService.findOne(+id) };
   }
 
+  @ApiOperation({ summary: 'Create a role' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    schema: {
+      example: {
+        data: {
+          name: 'Superadmin',
+          id: 3,
+        },
+      },
+    },
+    description: 'Successful response!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+        error: 'Forbidden',
+      },
+    },
+    description: 'Forbidden response!',
+  })
+  @CheckAbility({ action: 'create', subject: 'Role' })
   @Post('/')
   async create(@Body() createRoleDto: CreateRoleDto) {
     return { data: await this.rolesService.create(createRoleDto) };
+  }
+
+  @ApiOperation({ summary: 'Update a role' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    schema: {
+      example: {
+        data: {
+          id: 3,
+          name: 'BuperAdmin',
+          permissions: [
+            {
+              id: 1,
+              action: 'index',
+              subject: 'File',
+            },
+            {
+              id: 2,
+              action: 'create',
+              subject: 'File',
+            },
+            {
+              id: 3,
+              action: 'read',
+              subject: 'File',
+            },
+            {
+              id: 4,
+              action: 'update',
+              subject: 'File',
+            },
+            {
+              id: 5,
+              action: 'delete',
+              subject: 'File',
+            },
+            {
+              id: 6,
+              action: 'trash',
+              subject: 'File',
+            },
+          ],
+        },
+      },
+    },
+    description: 'Successful response',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+        error: 'Forbidden',
+      },
+    },
+    description: 'Forbidden response!',
+  })
+  @CheckAbility({ action: 'update', subject: 'Role' })
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    return { data: await this.rolesService.update(+id, updateRoleDto) };
   }
 }
