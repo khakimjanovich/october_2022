@@ -49,7 +49,7 @@ export class FilesService {
     }
 
     const saved_file = await this.fileRepository.create({
-      path: `/${this.configService.get('app.apiPrefix')}/v1/admin/${file.path}`,
+      path: `/${this.configService.get('app.apiPrefix')}/v1/${file.path}`,
       created_by: user,
     });
 
