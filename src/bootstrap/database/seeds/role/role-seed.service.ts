@@ -14,6 +14,19 @@ export class RoleSeedService {
   ) {}
 
   async run() {
+    const countAdmin = await this.repository.count({
+      where: {
+        id: RoleEnum.admin,
+      },
+    });
+
+    if (countAdmin === 0) {
+      const admin = this.repository.create({
+        name: 'Admin',
+      });
+      await this.repository.save(admin);
+    }
+
     const countUser = await this.repository.count({
       where: {
         id: RoleEnum.user,
@@ -23,24 +36,9 @@ export class RoleSeedService {
     if (countUser === 0) {
       await this.repository.save(
         this.repository.create({
-          id: RoleEnum.user,
           name: 'User',
         }),
       );
-    }
-
-    const countAdmin = await this.repository.count({
-      where: {
-        id: RoleEnum.admin,
-      },
-    });
-
-    if (countAdmin === 0) {
-      const admin = this.repository.create({
-        id: RoleEnum.admin,
-        name: 'Admin',
-      });
-      await this.repository.save(admin);
     }
 
     const superAdminRole = await this.repository.findOne({

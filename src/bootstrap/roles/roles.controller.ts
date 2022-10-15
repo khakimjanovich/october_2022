@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -23,6 +24,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { DeleteRoleDto } from './dto/delete-role.dto';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
@@ -33,6 +35,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 })
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
+
   @ApiOperation({ summary: 'Get all roles endpoint' })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -81,6 +84,96 @@ export class RolesController {
       count,
       page_size,
     };
+  }
+
+  @ApiOperation({ summary: 'Get trashed roles list' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    schema: {
+      example: {
+        data: [
+          {
+            deleted_reason: 'It has to be deleted',
+            created_at: '2022-10-15T08:17:12.341Z',
+            deleted_at: '2022-10-15T08:17:57.433Z',
+            id: 3,
+            name: 'BuperAdmin',
+            deleted_by: {
+              id: 1,
+              name: 'Super admin updated',
+              email: 'admin@example.com',
+            },
+            created_by: {
+              id: 1,
+              name: 'Super admin updated',
+              email: 'admin@example.com',
+            },
+            last_update_by: {
+              id: 1,
+              name: 'Super admin updated',
+              email: 'admin@example.com',
+            },
+            permissions: [
+              {
+                id: 1,
+                action: 'index',
+                subject: 'File',
+              },
+              {
+                id: 2,
+                action: 'create',
+                subject: 'File',
+              },
+              {
+                id: 3,
+                action: 'read',
+                subject: 'File',
+              },
+              {
+                id: 4,
+                action: 'update',
+                subject: 'File',
+              },
+              {
+                id: 5,
+                action: 'delete',
+                subject: 'File',
+              },
+              {
+                id: 6,
+                action: 'trash',
+                subject: 'File',
+              },
+            ],
+          },
+        ],
+        count: 1,
+        page: 1,
+        page_size: 10,
+      },
+    },
+    description: 'Successful response!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+        error: 'Forbidden',
+      },
+    },
+    description: 'Forbidden response!',
+  })
+  @Get('/trash')
+  @CheckAbility({ action: 'trash', subject: 'Role' })
+  async trashed(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('page_size', new DefaultValuePipe(10), ParseIntPipe)
+    page_size: number,
+  ) {
+    const [data, count] = await this.rolesService.trash(page, page_size);
+    return { data, count, page, page_size };
   }
 
   @ApiOperation({ summary: 'Get role with permissions endpoint' })
@@ -321,8 +414,10 @@ export class RolesController {
   })
   @CheckAbility({ action: 'create', subject: 'Role' })
   @Post('/')
-  async create(@Body() createRoleDto: CreateRoleDto) {
-    return { data: await this.rolesService.create(createRoleDto) };
+  async create(@Body() createRoleDto: CreateRoleDto, @Request() request) {
+    return {
+      data: await this.rolesService.create(createRoleDto, request.user.id),
+    };
   }
 
   @ApiOperation({ summary: 'Update a role' })
@@ -383,7 +478,25 @@ export class RolesController {
   })
   @CheckAbility({ action: 'update', subject: 'Role' })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return { data: await this.rolesService.update(+id, updateRoleDto) };
+  async update(
+    @Request() request,
+    @Param('id') id: string,
+    @Body() updateRoleDto: UpdateRoleDto,
+  ) {
+    return {
+      data: await this.rolesService.update(+id, updateRoleDto, request.user.id),
+    };
+  }
+
+  @ApiOperation({ summary: 'Delete a role' })
+  @Post(':id')
+  async delete(
+    @Request() request,
+    @Param('id') id: string,
+    @Body() deleteRoleDto: DeleteRoleDto,
+  ) {
+    return {
+      data: await this.rolesService.remove(+id, deleteRoleDto, request.user.id),
+    };
   }
 }

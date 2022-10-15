@@ -6,13 +6,12 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { CreateCrudLogDto } from '../../utils/base-modules/crud-logs/dto/create-crud-log.dto';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
 import { IsExist } from '../../utils/validators/is-exists.validator';
 import { Role } from '../../roles/entities/role.entity';
 
-export class CreateBackendUserDto extends PartialType(CreateCrudLogDto) {
+export class CreateBackendUserDto {
   @ApiProperty({
     required: true,
     example: 'User name',

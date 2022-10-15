@@ -3,31 +3,92 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Role } from '../../roles/entities/role.entity';
-import { CrudLog } from '../../utils/base-modules/crud-logs/entities/crud-logs.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { RoleEnum } from '../../roles/roles.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('backend_users')
-export class BackendUser extends CrudLog {
+export class BackendUser {
+  @ApiProperty({ example: 1, description: 'Unique ID' })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ApiProperty({ example: 'Super Admin', description: 'Name of the user' })
   @Column()
   name: string;
 
+  @ApiProperty({ example: 'en', description: 'Locale of the entity' })
+  @Index()
+  @Column()
+  locale: string;
+
+  @ApiProperty({
+    example: 'superadmin@gmail.com',
+    description: 'Email of the user',
+  })
   @Column()
   email: string;
 
+  @ApiProperty({ example: 'secret', description: 'User password' })
   @Column()
   password: string;
 
+  @ApiProperty({
+    example:
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHw%3D&w=1000&q=80',
+    description: 'Profile picture of the user',
+  })
   @Column({ nullable: true })
   avatar?: string | null;
+
+  @ApiProperty({
+    example: 'This has to be deleted',
+    description: 'Reason of deletion',
+  })
+  @Column({ nullable: true })
+  deleted_reason?: string | null;
+
+  @ManyToOne(() => BackendUser)
+  @JoinColumn({
+    name: 'created_by_id',
+  })
+  created_by?: BackendUser | null;
+
+  @ManyToOne(() => BackendUser)
+  @JoinColumn({
+    name: 'last_updated_by_id',
+  })
+  last_update_by?: BackendUser | null;
+
+  @ManyToOne(() => BackendUser)
+  @JoinColumn({
+    name: 'deleted_by_id',
+  })
+  deleted_by?: BackendUser | null;
+
+  @ApiProperty({ example: new Date(), description: 'Creation date' })
+  @CreateDateColumn()
+  created_at: Date;
+
+  @ApiProperty({ example: new Date(), description: 'Last updated date' })
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at?: Date | null;
 
   public previousPassword: string;
 

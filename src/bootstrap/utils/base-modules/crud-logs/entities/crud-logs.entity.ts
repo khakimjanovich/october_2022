@@ -3,25 +3,15 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Index,
+  Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BackendUser } from '../../../../backend_users/entities/backend_user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CrudLog extends BaseEntity {
-  @ApiProperty({ example: 1, description: 'Unique ID' })
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ApiProperty({ example: 'en', description: 'Locale of the entity' })
-  @Index()
-  @Column()
-  locale: string;
-
   @ApiProperty({
     example: 'This has to be deleted',
     description: 'Reason of deletion',

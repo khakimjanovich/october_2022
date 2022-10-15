@@ -6,9 +6,15 @@ import { Role } from './entities/role.entity';
 import { AbilityModule } from '../ability/ability.module';
 import { IsNotExist } from '../utils/validators/is-not-exists.validator';
 import { PermissionsModule } from '../permissions/permissions.module';
+import { ActivitiesModule } from "../activities/activities.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Role]), AbilityModule, PermissionsModule],
+  imports: [
+    TypeOrmModule.forFeature([Role]),
+    AbilityModule,
+    PermissionsModule,
+    ActivitiesModule,
+  ],
   controllers: [RolesController],
   providers: [RolesService, IsNotExist],
 })
