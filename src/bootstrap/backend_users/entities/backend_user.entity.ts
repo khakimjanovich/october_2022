@@ -71,7 +71,7 @@ export class BackendUser {
   @JoinColumn({
     name: 'last_updated_by_id',
   })
-  last_update_by?: BackendUser | null;
+  last_updated_by?: BackendUser | null;
 
   @ManyToOne(() => BackendUser)
   @JoinColumn({

@@ -132,7 +132,7 @@ export class MeController {
           name: 'User',
         },
         created_by: null,
-        last_update_by: {
+        last_updated_by: {
           id: 6,
         },
         permissions: [],

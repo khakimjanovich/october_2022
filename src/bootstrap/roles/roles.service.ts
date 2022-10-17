@@ -47,7 +47,7 @@ export class RolesService {
     );
 
     role.created_by = { id: current_user_id } as BackendUser;
-    role.last_update_by = { id: current_user_id } as BackendUser;
+    role.last_updated_by = { id: current_user_id } as BackendUser;
 
     const created_role = await this.roleRepository.save(role);
 
@@ -91,7 +91,7 @@ export class RolesService {
       updateRoleDto.permissions,
     );
 
-    role.last_update_by = { id: currentUserId } as BackendUser;
+    role.last_updated_by = { id: currentUserId } as BackendUser;
 
     return await this.roleRepository.save(role);
   }
@@ -116,7 +116,7 @@ export class RolesService {
       current_user_id,
     );
 
-    role.last_update_by = { id: current_user_id } as BackendUser;
+    role.last_updated_by = { id: current_user_id } as BackendUser;
     role.deleted_by = { id: current_user_id } as BackendUser;
     role.deleted_reason = deleteRoleDto.deleted_reason;
     await this.roleRepository.save(role);
@@ -131,7 +131,7 @@ export class RolesService {
       .where('role.deleted_at IS NOT NULL')
       .leftJoinAndSelect('role.deleted_by', 'deleted_by')
       .leftJoinAndSelect('role.created_by', 'created_by')
-      .leftJoinAndSelect('role.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('role.last_updated_by', 'last_updated_by')
       .leftJoinAndSelect('role.permissions', 'permissions')
       .select([
         'role.id',
@@ -145,9 +145,9 @@ export class RolesService {
         'created_by.id',
         'created_by.name',
         'created_by.email',
-        'last_update_by.id',
-        'last_update_by.name',
-        'last_update_by.email',
+        'last_updated_by.id',
+        'last_updated_by.name',
+        'last_updated_by.email',
         'permissions.id',
         'permissions.subject',
         'permissions.action',

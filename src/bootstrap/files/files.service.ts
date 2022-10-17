@@ -76,7 +76,7 @@ export class FilesService {
   ) {
     const file = await this.findOne(id);
     file.deleted_reason = deleteFileDto.deleted_reason;
-    file.last_update_by = { id: current_user_id } as BackendUser;
+    file.last_updated_by = { id: current_user_id } as BackendUser;
     file.deleted_by = { id: current_user_id } as BackendUser;
     await this.fileRepository.save(file);
     await this.removeFile(file.path);

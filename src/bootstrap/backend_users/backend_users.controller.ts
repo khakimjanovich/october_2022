@@ -53,7 +53,7 @@ export class BackendUsersController {
           created_by: {
             id: 1,
           },
-          last_update_by: {
+          last_updated_by: {
             id: 1,
           },
           deleted_reason: null,
@@ -107,7 +107,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: null,
+            last_updated_by: null,
           },
           {
             id: 8,
@@ -124,7 +124,7 @@ export class BackendUsersController {
               name: 'Super admin updated',
               email: 'admin@example.com',
             },
-            last_update_by: {
+            last_updated_by: {
               id: 1,
               name: 'Super admin updated',
               email: 'admin@example.com',
@@ -141,7 +141,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: null,
+            last_updated_by: null,
           },
           {
             id: 6,
@@ -154,7 +154,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: {
+            last_updated_by: {
               id: 6,
               name: 'Super admin updated',
               email: 'adm2a131i2n3@admin.com',
@@ -171,7 +171,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: null,
+            last_updated_by: null,
           },
           {
             id: 2,
@@ -184,7 +184,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: null,
+            last_updated_by: null,
           },
           {
             id: 1,
@@ -197,7 +197,7 @@ export class BackendUsersController {
               name: 'Admin',
             },
             created_by: null,
-            last_update_by: {
+            last_updated_by: {
               id: 1,
               name: 'Super admin updated',
               email: 'admin@example.com',
@@ -265,7 +265,7 @@ export class BackendUsersController {
               name: 'Super admin updated',
               email: 'admin@example.com',
             },
-            last_update_by: {
+            last_updated_by: {
               name: 'Super admin updated',
               email: 'admin@example.com',
             },
@@ -287,7 +287,7 @@ export class BackendUsersController {
               name: 'User',
             },
             created_by: null,
-            last_update_by: null,
+            last_updated_by: null,
             deleted_by: {
               name: 'Super admin updated',
               email: 'admin@example.com',
@@ -350,7 +350,7 @@ export class BackendUsersController {
             name: 'Admin',
           },
           created_by: null,
-          last_update_by: {
+          last_updated_by: {
             id: 1,
             name: 'Super admin updated',
             email: 'admin@example.com',
@@ -395,7 +395,7 @@ export class BackendUsersController {
             name: 'Admin',
           },
           created_by: null,
-          last_update_by: {
+          last_updated_by: {
             id: 1,
             name: 'Super admin updated',
             email: 'admin@example.com',
@@ -448,7 +448,7 @@ export class BackendUsersController {
             name: 'User',
           },
           created_by: null,
-          last_update_by: {
+          last_updated_by: {
             id: 1,
           },
           permissions: [
@@ -536,7 +536,7 @@ export class BackendUsersController {
             name: 'Super admin updated',
             email: 'admin@example.com',
           },
-          last_update_by: {
+          last_updated_by: {
             id: 1,
             name: 'Super admin updated',
             email: 'admin@example.com',
@@ -555,7 +555,7 @@ export class BackendUsersController {
               name: 'Admin',
             },
             created_by: null,
-            last_update_by: {
+            last_updated_by: {
               id: 1,
               name: 'Super admin updated',
               email: 'admin@example.com',

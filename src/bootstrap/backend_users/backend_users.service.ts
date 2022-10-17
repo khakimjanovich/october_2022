@@ -29,7 +29,7 @@ export class BackendUsersService {
       .createQueryBuilder('backend_user')
       .leftJoinAndSelect('backend_user.role', 'role')
       .leftJoinAndSelect('backend_user.created_by', 'created_by')
-      .leftJoinAndSelect('backend_user.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('backend_user.last_updated_by', 'last_updated_by')
       .leftJoinAndSelect('backend_user.permissions', 'permissions')
       .select([
         'backend_user.id',
@@ -43,9 +43,9 @@ export class BackendUsersService {
         'created_by.id',
         'created_by.name',
         'created_by.email',
-        'last_update_by.id',
-        'last_update_by.name',
-        'last_update_by.email',
+        'last_updated_by.id',
+        'last_updated_by.name',
+        'last_updated_by.email',
         'permissions.id',
         'permissions.subject',
         'permissions.action',
@@ -72,7 +72,7 @@ export class BackendUsersService {
     const user = await this.backendUsersRepository.create(createUserDto);
     if (current_user_id) {
       user.created_by = { id: current_user_id } as BackendUser;
-      user.last_update_by = { id: current_user_id } as BackendUser;
+      user.last_updated_by = { id: current_user_id } as BackendUser;
     }
 
     if (current_user_id) {
@@ -98,7 +98,7 @@ export class BackendUsersService {
       .orWhere('backend_user.name LIKE :search', { search: `%${search}%` })
       .leftJoinAndSelect('backend_user.role', 'role')
       .leftJoinAndSelect('backend_user.created_by', 'created_by')
-      .leftJoinAndSelect('backend_user.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('backend_user.last_updated_by', 'last_updated_by')
       .leftJoinAndSelect('backend_user.permissions', 'permissions')
       .select([
         'backend_user.id',
@@ -110,9 +110,9 @@ export class BackendUsersService {
         'created_by.id',
         'created_by.name',
         'created_by.email',
-        'last_update_by.id',
-        'last_update_by.name',
-        'last_update_by.email',
+        'last_updated_by.id',
+        'last_updated_by.name',
+        'last_updated_by.email',
         'role.name',
         'role.id',
         'permissions.id',
@@ -151,7 +151,7 @@ export class BackendUsersService {
 
     Object.assign(user, updateUserDto);
 
-    user.last_update_by = { id: current_user_id } as BackendUser;
+    user.last_updated_by = { id: current_user_id } as BackendUser;
 
     return this.backendUsersRepository.save(user);
   }
@@ -217,7 +217,7 @@ export class BackendUsersService {
       .andWhere('backend_user.email LIKE :search', { search: `%${search}%` })
       .leftJoinAndSelect('backend_user.role', 'role')
       .leftJoinAndSelect('backend_user.created_by', 'created_by')
-      .leftJoinAndSelect('backend_user.last_update_by', 'last_update_by')
+      .leftJoinAndSelect('backend_user.last_updated_by', 'last_updated_by')
       .leftJoinAndSelect('backend_user.deleted_by', 'deleted_by')
       .select([
         'backend_user.id',
@@ -231,8 +231,8 @@ export class BackendUsersService {
         'backend_user.created_by',
         'created_by.name',
         'created_by.email',
-        'last_update_by.name',
-        'last_update_by.email',
+        'last_updated_by.name',
+        'last_updated_by.email',
         'deleted_by.name',
         'deleted_by.email',
         'role.name',
@@ -267,7 +267,7 @@ export class BackendUsersService {
       );
     }
 
-    user.last_update_by = { id: current_user_id } as BackendUser;
+    user.last_updated_by = { id: current_user_id } as BackendUser;
 
     delete user.previousPassword;
     delete user.password;
