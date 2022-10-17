@@ -106,6 +106,16 @@ export class RolesService {
       throw new NotFoundException();
     }
 
+    await this.activitiesService.create(
+      {
+        name: 'Role was deleted!',
+        request_type: ActivitiesRouteTypeEnum.delete,
+        route: `api/v1/roles/${id}`,
+        before_update_action: role,
+      } as CreateActivityDto,
+      current_user_id,
+    );
+
     role.last_update_by = { id: current_user_id } as BackendUser;
     role.deleted_by = { id: current_user_id } as BackendUser;
     role.deleted_reason = deleteRoleDto.deleted_reason;
