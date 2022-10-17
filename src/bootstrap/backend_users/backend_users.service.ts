@@ -182,17 +182,6 @@ export class BackendUsersService {
     user.deleted_by = { id: current_user.id } as BackendUser;
     await this.backendUsersRepository.save(user);
 
-    await this.activitiesService.create(
-      {
-        name: `${current_user.name} has deleted the user`,
-        before_update_action: user,
-        route: '/api/v1/users/delete',
-        request_type: ActivitiesRouteTypeEnum.delete,
-        after_update_action: null,
-      },
-      current_user.id,
-    );
-
     await this.backendUsersRepository.softDelete(id);
 
     return user;

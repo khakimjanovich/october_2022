@@ -28,11 +28,16 @@ export class RolesService {
       .getManyAndCount();
   }
 
-  findOne(id: number) {
-    return this.roleRepository.findOne({
+  async findOne(id: number) {
+    const role = await this.roleRepository.findOne({
       where: { id },
       relations: ['permissions'],
     });
+
+    if (!role) {
+      throw new NotFoundException();
+    }
+    return role;
   }
 
   async create(createRoleDto: CreateRoleDto, current_user_id: number) {
@@ -66,7 +71,7 @@ export class RolesService {
   ) {
     const role = await this.roleRepository.findOne({ where: { id } });
     if (!role) {
-      throw NotFoundException;
+      throw new NotFoundException();
     }
 
     await this.activitiesService.create(
@@ -98,7 +103,7 @@ export class RolesService {
   ) {
     const role = await this.roleRepository.findOne({ where: { id } });
     if (!role) {
-      throw NotFoundException;
+      throw new NotFoundException();
     }
 
     role.last_update_by = { id: current_user_id } as BackendUser;
