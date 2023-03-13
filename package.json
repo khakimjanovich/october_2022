@@ -10,12 +10,12 @@
   "license": "MIT",
   "scripts": {
     "typeorm": "env-cmd ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:generate": "npm run typeorm -- -d=src/bootstrap/database/data-source.ts migration:generate",
+    "migration:generate": "npm run typeorm -- -d=src/database/data-source.ts migration:generate",
     "migration:create": "npm run typeorm -- migration:create",
-    "migration:run": "npm run typeorm -- --dataSource=src/bootstrap/database/data-source.ts migration:run",
-    "migration:revert": "npm run typeorm -- --dataSource=src/bootstrap/database/data-source.ts migration:revert",
-    "schema:drop": "npm run typeorm -- --dataSource=src/bootstrap/database/data-source.ts schema:drop",
-    "seed:run": "ts-node -r tsconfig-paths/register ./src/bootstrap/database/seeds/run-seed.ts",
+    "migration:run": "npm run typeorm -- --dataSource=src/database/data-source.ts migration:run",
+    "migration:revert": "npm run typeorm -- --dataSource=src/database/data-source.ts migration:revert",
+    "schema:drop": "npm run typeorm -- --dataSource=src/database/data-source.ts schema:drop",
+    "seed:run": "ts-node -r tsconfig-paths/register ./src/database/seeds/run-seed.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -38,7 +38,6 @@
     "@nestjs/jwt": "^10.0.2",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
@@ -51,7 +50,6 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "swagger-ui-express": "^4.5.0",
     "typeorm": "^0.3.10"
   },
   "devDependencies": {
